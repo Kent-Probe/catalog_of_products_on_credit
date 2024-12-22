@@ -1,0 +1,66 @@
+---
+import Arrow from "@/icon/Arrow.astro";
+
+type AccordionProps = {
+    title: string;
+}
+
+const { title }: AccordionProps = Astro.props;
+---
+
+<button class="accordion">
+    <span>
+        {title}
+    </span>
+    <div id="arrow">
+        <Arrow />
+    </div>
+</button>
+<div class="panel">
+    <slot />
+</div>
+
+<style>
+    .accordion {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        
+        width: 100%;
+        background-color: #ffffff;
+        padding: 1.8rem;
+        
+        outline: none;
+        border: none;
+        border-bottom: 2px solid rgba(102, 51, 153, 0.25);
+        
+        text-align: left;
+        font-size: 15px;
+        font-weight: bold;
+        color: #444;
+        
+        cursor: pointer;
+        
+        transition: 0.4s;
+
+    }
+    
+    .active, .accordion:hover {
+        border-bottom: 2px solid rebeccapurple;
+    }
+    
+    .panel {
+        padding: 0 1.8rem;
+        padding-top: 2rem;
+        background-color: white;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+    }
+
+    #arrow {
+        scale: 0.6;
+        transition: 0.4s;
+    }
+</style>

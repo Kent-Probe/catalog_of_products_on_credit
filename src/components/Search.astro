@@ -1,0 +1,55 @@
+---
+import SearchIcon from '@/icon/SearchIcon.astro';
+---
+<search>
+    <form action="/search" method="get">
+        <input type="text" name="q" placeholder="Search..." />
+        <button type="submit">
+            <SearchIcon size="12px" fill="#fff"/>
+        </button>
+    </form>
+</search>
+
+<style>
+    search {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-inline: 10rem;
+        width: 100%;
+    }
+
+    form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        gap: 0.7rem;
+    }
+
+    input {
+        padding: 0.8rem 1.5rem;
+        width: 100%;
+        max-width: 600px;
+        border-radius: 5px;
+        border: none;
+        background-color: #F5F7F9;
+    }
+    input:focus {
+        outline: 2px solid #dddfe1;
+        outline-offset: 0.2rem;
+    }
+
+    button {
+        padding: 0.8rem 0.8rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #792EDE;
+        fill: #fff;
+
+        &:hover {
+            background-color: #5E1EAD;
+        }
+    }
+</style>

@@ -1,0 +1,407 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "brand": "Samsung",
+      "model": "Galaxy S21",
+      "rear_camera_mp": 64,
+      "front_camera_mp": 10,
+      "rom_memory_gb": 128,
+      "ram_memory_gb": 8,
+      "processor": "Exynos 2100",
+      "screen_inches": 6.2,
+      "battery_mah": 4000,
+      "financials": ["Celya", "Krediya"],
+      "savings": 150000,
+      "installments": [
+        { "quantity": 1, "price": 100000 },
+        { "quantity": 12, "price": 50000 },
+        { "quantity": 24, "price": 25000 }
+      ]
+    },
+    {
+      "id": 2,
+      "brand": "Apple",
+      "model": "iPhone 13",
+      "rear_camera_mp": 12,
+      "front_camera_mp": 12,
+      "rom_memory_gb": 256,
+      "ram_memory_gb": 4,
+      "processor": "A15 Bionic",
+      "screen_inches": 6.1,
+      "battery_mah": 3240,
+      "financials": ["Alo Cred", "Krediya"],
+      "savings": 200000,
+      "installments": [
+        { "quantity": 1, "price": 150000 },
+        { "quantity": 12, "price": 60000 }
+      ]
+    },
+    {
+      "id": 3,
+      "brand": "Xiaomi",
+      "model": "Mi 11",
+      "rear_camera_mp": 108,
+      "front_camera_mp": 20,
+      "rom_memory_gb": 128,
+      "ram_memory_gb": 8,
+      "processor": "Snapdragon 888",
+      "screen_inches": 6.81,
+      "battery_mah": 4600,
+      "financials": ["Celya", "Alo Cred"],
+      "savings": 180000,
+      "installments": [
+        { "quantity": 1, "price": 120000 },
+        { "quantity": 12, "price": 55000 },
+        { "quantity": 24, "price": 27500 },
+        { "quantity": 36, "price": 18500 }
+      ]
+    },
+    {
+      "id": 4,
+      "brand": "OnePlus",
+      "model": "9 Pro",
+      "rear_camera_mp": 48,
+      "front_camera_mp": 16,
+      "rom_memory_gb": 256,
+      "ram_memory_gb": 12,
+      "processor": "Snapdragon 888",
+      "screen_inches": 6.7,
+      "battery_mah": 4500,
+      "financials": ["Krediya", "Alo Cred"],
+      "savings": 220000,
+      "installments": [
+        { "quantity": 1, "price": 160000 },
+        { "quantity": 12, "price": 70000 },
+        { "quantity": 24, "price": 35000 },
+        { "quantity": 36, "price": 23000 }
+      ]
+    },
+    {
+      "id": 5,
+      "brand": "Google",
+      "model": "Pixel 6",
+      "rear_camera_mp": 50,
+      "front_camera_mp": 8,
+      "rom_memory_gb": 128,
+      "ram_memory_gb": 8,
+      "processor": "Google Tensor",
+      "screen_inches": 6.4,
+      "battery_mah": 4614,
+      "financials": ["Celya", "Krediya"],
+      "savings": 250000,
+      "installments": [
+        { "quantity": 1, "price": 180000 },
+        { "quantity": 12, "price": 80000 }
+      ]
+    },
+    {
+      "id": 6,
+      "brand": "Huawei",
+      "model": "P40 Pro",
+      "rear_camera_mp": 50,
+      "front_camera_mp": 32,
+      "rom_memory_gb": 256,
+      "ram_memory_gb": 8,
+      "processor": "Kirin 990 5G",
+      "screen_inches": 6.58,
+      "battery_mah": 4200,
+      "financials": ["Alo Cred", "Celya"],
+      "savings": 300000,
+      "installments": [
+        { "quantity": 1, "price": 200000 },
+        { "quantity": 12, "price": 90000 },
+        { "quantity": 24, "price": 45000 },
+        { "quantity": 36, "price": 30000 }
+      ]
+    },
+    {
+      "id": 7,
+      "brand": "Sony",
+      "model": "Xperia 1 III",
+      "rear_camera_mp": 12,
+      "front_camera_mp": 8,
+      "rom_memory_gb": 256,
+      "ram_memory_gb": 12,
+      "processor": "Snapdragon 888",
+      "screen_inches": 6.5,
+      "battery_mah": 4500,
+      "financials": ["Krediya", "Alo Cred"],
+      "savings": 270000,
+      "installments": [
+        { "quantity": 1, "price": 190000 },
+        { "quantity": 12, "price": 85000 },
+        { "quantity": 24, "price": 42500 },
+        { "quantity": 36, "price": 28000 }
+      ]
+    },
+    {
+      "id": 8,
+      "brand": "Oppo",
+      "model": "Find X3 Pro",
+      "rear_camera_mp": 50,
+      "front_camera_mp": 32,
+      "rom_memory_gb": 256,
+      "ram_memory_gb": 12,
+      "processor": "Snapdragon 888",
+      "screen_inches": 6.7,
+      "battery_mah": 4500,
+      "financials": ["Celya", "Krediya"],
+      "savings": 320000,
+      "installments": [
+        { "quantity": 1, "price": 210000 },
+        { "quantity": 12, "price": 100000 },
+        { "quantity": 24, "price": 50000 },
+        { "quantity": 36, "price": 33000 }
+      ]
+    },
+    {
+      "id": 9,
+      "brand": "Vivo",
+      "model": "X60 Pro",
+      "rear_camera_mp": 48,
+      "front_camera_mp": 32,
+      "rom_memory_gb": 256,
+      "ram_memory_gb": 12,
+      "processor": "Snapdragon 870",
+      "screen_inches": 6.56,
+      "battery_mah": 4200,
+      "financials": ["Alo Cred", "Celya"],
+      "savings": 350000,
+      "installments": [
+        { "quantity": 1, "price": 220000 },
+        { "quantity": 12, "price": 110000 }
+      ]
+    },
+    {
+      "id": 10,
+      "brand": "Realme",
+      "model": "GT",
+      "rear_camera_mp": 64,
+      "front_camera_mp": 16,
+      "rom_memory_gb": 128,
+      "ram_memory_gb": 8,
+      "processor": "Snapdragon 888",
+      "screen_inches": 6.43,
+      "battery_mah": 4500,
+      "financials": ["Krediya", "Alo Cred"],
+      "savings": 380000,
+      "installments": [
+        { "quantity": 1, "price": 230000 },
+        { "quantity": 12, "price": 120000 },
+        { "quantity": 24, "price": 60000 }
+      ]
+    },
+    {
+      "id": 11,
+      "brand": "Motorola",
+      "model": "Edge 20 Pro",
+      "rear_camera_mp": 108,
+      "front_camera_mp": 32,
+      "rom_memory_gb": 256,
+      "ram_memory_gb": 12,
+      "processor": "Snapdragon 870",
+      "screen_inches": 6.7,
+      "battery_mah": 4500,
+      "financials": ["Celya", "Krediya"],
+      "savings": 400000,
+      "installments": [
+        { "quantity": 1, "price": 240000 },
+        { "quantity": 12, "price": 130000 },
+        { "quantity": 24, "price": 65000 }
+      ]
+    },
+    {
+      "id": 12,
+      "brand": "Asus",
+      "model": "ROG Phone 5",
+      "rear_camera_mp": 64,
+      "front_camera_mp": 24,
+      "rom_memory_gb": 256,
+      "ram_memory_gb": 16,
+      "processor": "Snapdragon 888",
+      "screen_inches": 6.78,
+      "battery_mah": 6000,
+      "financials": ["Alo Cred", "Celya"],
+      "savings": 420000,
+      "installments": [
+        { "quantity": 1, "price": 250000 },
+        { "quantity": 12, "price": 140000 },
+        { "quantity": 24, "price": 70000 }
+      ]
+    },
+    {
+      "id": 13,
+      "brand": "Nokia",
+      "model": "8.3 5G",
+      "rear_camera_mp": 64,
+      "front_camera_mp": 24,
+      "rom_memory_gb": 128,
+      "ram_memory_gb": 8,
+      "processor": "Snapdragon 765G",
+      "screen_inches": 6.81,
+      "battery_mah": 4500,
+      "financials": ["Krediya", "Alo Cred"],
+      "savings": 440000,
+      "installments": [
+        { "quantity": 1, "price": 260000 },
+        { "quantity": 12, "price": 150000 },
+        { "quantity": 24, "price": 75000 },
+        { "quantity": 36, "price": 50000 }
+      ]
+    },
+    {
+      "id": 14,
+      "brand": "LG",
+      "model": "Wing",
+      "rear_camera_mp": 64,
+      "front_camera_mp": 32,
+      "rom_memory_gb": 256,
+      "ram_memory_gb": 8,
+      "processor": "Snapdragon 765G",
+      "screen_inches": 6.8,
+      "battery_mah": 4000,
+      "financials": ["Celya", "Krediya"],
+      "savings": 460000,
+      "installments": [
+        { "quantity": 1, "price": 270000 },
+        { "quantity": 12, "price": 160000 },
+        { "quantity": 24, "price": 80000 }
+      ]
+    },
+    {
+      "id": 15,
+      "brand": "ZTE",
+      "model": "Axon 30 Ultra",
+      "rear_camera_mp": 64,
+      "front_camera_mp": 16,
+      "rom_memory_gb": 256,
+      "ram_memory_gb": 12,
+      "processor": "Snapdragon 888",
+      "screen_inches": 6.67,
+      "battery_mah": 4600,
+      "financials": ["Alo Cred", "Celya"],
+      "savings": 480000,
+      "installments": [
+        { "quantity": 1, "price": 280000 },
+        { "quantity": 12, "price": 170000 }
+      ]
+    },
+    {
+      "id": 16,
+      "brand": "Lenovo",
+      "model": "Legion Phone Duel 2",
+      "rear_camera_mp": 64,
+      "front_camera_mp": 44,
+      "rom_memory_gb": 512,
+      "ram_memory_gb": 16,
+      "processor": "Snapdragon 888",
+      "screen_inches": 6.92,
+      "battery_mah": 5500,
+      "financials": ["Krediya", "Alo Cred"],
+      "savings": 500000,
+      "installments": [
+        { "quantity": 1, "price": 290000 },
+        { "quantity": 12, "price": 180000 },
+        { "quantity": 24, "price": 90000 },
+        { "quantity": 36, "price": 60000 }
+      ]
+    },
+    {
+      "id": 17,
+      "brand": "Meizu",
+      "model": "18 Pro",
+      "rear_camera_mp": 50,
+      "front_camera_mp": 44,
+      "rom_memory_gb": 256,
+      "ram_memory_gb": 12,
+      "processor": "Snapdragon 888",
+      "screen_inches": 6.7,
+      "battery_mah": 4500,
+      "financials": ["Celya", "Krediya"],
+      "savings": 520000,
+      "installments": [
+        { "quantity": 1, "price": 300000 },
+        { "quantity": 12, "price": 190000 },
+        { "quantity": 24, "price": 95000 },
+        { "quantity": 36, "price": 63000 }
+      ]
+    },
+    {
+      "id": 18,
+      "brand": "Honor",
+      "model": "Magic 3 Pro",
+      "rear_camera_mp": 50,
+      "front_camera_mp": 13,
+      "rom_memory_gb": 256,
+      "ram_memory_gb": 12,
+      "processor": "Snapdragon 888",
+      "screen_inches": 6.76,
+      "battery_mah": 4600,
+      "financials": ["Alo Cred", "Celya"],
+      "savings": 540000,
+      "installments": [
+        { "quantity": 1, "price": 310000 },
+        { "quantity": 12, "price": 200000 },
+        { "quantity": 24, "price": 100000 },
+        { "quantity": 36, "price": 67000 }
+      ]
+    },
+    {
+      "id": 19,
+      "brand": "TCL",
+      "model": "20 Pro 5G",
+      "rear_camera_mp": 48,
+      "front_camera_mp": 32,
+      "rom_memory_gb": 256,
+      "ram_memory_gb": 6,
+      "processor": "Snapdragon 750G",
+      "screen_inches": 6.67,
+      "battery_mah": 4500,
+      "financials": ["Krediya", "Alo Cred"],
+      "savings": 560000,
+      "installments": [
+        { "quantity": 1, "price": 320000 },
+        { "quantity": 12, "price": 210000 },
+        { "quantity": 24, "price": 105000 },
+        { "quantity": 36, "price": 70000 }
+      ]
+    },
+    {
+      "id": 20,
+      "brand": "Alcatel",
+      "model": "5V",
+      "rear_camera_mp": 12,
+      "front_camera_mp": 8,
+      "rom_memory_gb": 32,
+      "ram_memory_gb": 3,
+      "processor": "Mediatek MT6762",
+      "screen_inches": 6.2,
+      "battery_mah": 4000,
+      "financials": ["Celya", "Krediya"],
+      "savings": 580000,
+      "installments": [
+        { "quantity": 1, "price": 330000 },
+        { "quantity": 12, "price": 220000 }
+      ]
+    },
+    {
+      "id": 21,
+      "brand": "Motorola",
+      "model": "Magic 5 Pro",
+      "rear_camera_mp": 12,
+      "front_camera_mp": 8,
+      "rom_memory_gb": 32,
+      "ram_memory_gb": 3,
+      "processor": "Mediatek MT6762",
+      "screen_inches": 6.2,
+      "battery_mah": 4000,
+      "financials": ["Celya", "Krediya", "Alo Cred"],
+      "savings": 580000,
+      "installments": [
+        { "quantity": 1, "price": 330000 },
+        { "quantity": 12, "price": 220000 }
+      ]
+    }
+  ]
+}

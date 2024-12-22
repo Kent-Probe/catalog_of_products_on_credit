@@ -1,0 +1,39 @@
+---
+import Filter from "@/components/Filter.astro";
+import Products from "@/components/Products.astro";
+import Pagination from "./Pagination.astro";
+---
+
+<section>
+    <div class="filter">
+        <Filter />
+    </div>
+    <div class="products-conteainer">
+        <Products />
+        <Pagination />
+    </div>
+</section> 
+
+<style>
+    section {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: start;
+        align-items: start;
+        gap: 2rem;
+    }
+
+    .filter{
+        width: 40rem;
+    }
+
+    .products-conteainer{
+        flex-grow: 2;
+        margin-bottom: 10rem;
+
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+</style>

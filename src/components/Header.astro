@@ -1,0 +1,45 @@
+---
+import Search from "@/components/search.astro";
+import Favicon from "@/icon/favicon.astro";
+---
+
+<header>
+    <div class="logo-container">
+        <Favicon size={50} />
+        <h1>Samicel</h1>
+    </div>
+
+    <div class="search-container">
+        <Search />
+    </div>
+</header>
+
+<style>
+    header {
+        padding: 3rem 10rem;
+        background-color: #fff;
+        
+        display: flex;
+        gap: 10rem;
+    }
+
+    .search-container { 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 80%;
+    }
+    
+    .logo-container { 
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    h1 {
+        margin: 0;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+</style>

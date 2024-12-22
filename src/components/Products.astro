@@ -1,0 +1,32 @@
+---
+import CardProduct from "@/components/CardProduct.astro";
+import seed from "@/seed/seed.json";
+
+const products = seed.products;
+---
+
+<div class="products">
+    {
+        products.map(product => {
+            return <CardProduct product={product} />;
+        })
+    }
+</div>
+
+
+<style>
+    .products {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 2rem;
+
+        width: 100%;
+
+        margin-bottom: 2rem;
+    }
+
+    .pagination{
+        background-color: red;
+    }
+</style>

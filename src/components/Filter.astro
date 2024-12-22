@@ -1,0 +1,173 @@
+---
+import Arrow from "@/icon/Arrow.astro";
+import FilterSlideSelector from "./FilterSlideSelector.astro";
+import Accordion from "@/layouts/Accordion.astro";
+import FilterIcon from "@/icon/FilterIcon.astro";
+---
+
+<script>
+    const acc = document.getElementsByClassName("accordion");
+    let i: number = 0;
+    
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        } 
+        const arrow = this.children[1];
+        if (arrow.style.transform === "rotate(180deg)") {
+            arrow.style.transform = "rotate(0deg)";
+        } else {
+            arrow.style.transform = "rotate(180deg)";
+        }
+      });
+    }
+</script>
+    
+
+<div class="container">
+    <Accordion title="Financieras">
+        <label class="container_cb">Celya
+            <input type="checkbox">
+            <span class="checkmark"></span>
+        </label>
+        <label class="container_cb">Krediya
+            <input type="checkbox">
+            <span class="checkmark"></span>
+        </label>
+        <label class="container_cb">Alo Cred
+            <input type="checkbox">
+            <span class="checkmark"></span>
+        </label>
+    </Accordion>
+
+    <Accordion title="RAM">
+        <FilterSlideSelector id="ram" typeFilter="GB" min={2} max={512} title="Seleccione el rango de RAM" />
+    </Accordion>
+
+    <Accordion title="Almacenamiento">
+        <FilterSlideSelector id="rom" typeFilter="GB" min={8} max={1024} title="Seleccione el rango de Almacenamiento" />
+    </Accordion>
+
+    <Accordion title="Cámara principal">
+        <FilterSlideSelector id="cam-principal" typeFilter="MP" min={5} max={300} title="Seleccione el rango de MP" />
+    </Accordion>
+
+    <Accordion title="Cámara frontal">
+        <FilterSlideSelector id="cam-front" typeFilter="MP" min={5} max={200} title="Seleccione el rango de MP" />
+    </Accordion>
+
+    <Accordion title="Pantalla">
+        <FilterSlideSelector id="screen" typeFilter="pulgadas" min={4} max={10} title="Seleccione el rango en pulgadas" />
+    </Accordion>
+
+    <Accordion title="Batería">
+        <FilterSlideSelector id="baterry" typeFilter="mAh" min={2000} max={10000} title="Seleccione el rango de mAh" />
+    </Accordion>
+
+    <button>
+        <FilterIcon />
+        Aplicar Filtros
+    </button>
+</div>
+
+<style>
+    .container {
+        width: 100%;
+    }
+
+    .container_cb {
+        display: block;
+        position: relative;
+
+        padding-left: 3.5rem;
+        margin-bottom: 1.2rem;
+        
+        font-size: 1.5rem;
+
+        user-select: none;
+        cursor: pointer;
+    }
+
+    .container_cb input {
+        position: absolute;
+        opacity: 0;
+        height: 0;
+        width: 0;
+
+        cursor: pointer;
+    }
+
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 2rem;
+        width: 2rem;
+        background-color: #eee;
+    }
+
+    .container_cb:hover input ~ .checkmark {
+        background-color: #ccc;
+    }
+
+    .container_cb input:checked ~ .checkmark {
+        background-color: rebeccapurple;
+    }
+
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+
+    .container_cb input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    .container_cb .checkmark:after {
+        left: 6px;
+        top: 2px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+    button{
+        width: 100%;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+
+        font-size: 1.5rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 0.5rem;
+        color: white;
+        background-color: rebeccapurple;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+
+        cursor: pointer;
+        margin-bottom: 1.5rem;
+
+        transition: 0.4s ease-in-out;
+
+        &:hover{
+            background-color: #5200a4;
+            scale: 0.96;
+        }
+    }
+
+</style>
+    
