@@ -1,0 +1,67 @@
+---
+import CloseIcon from "@/icon/closeIcon.astro";
+
+type ChipProps = {
+    text: string;
+}
+const { text, query }: ChipProps = Astro.props;
+
+---
+
+<script>
+
+    class ChipElement extends HTMLElement {
+        constructor() {
+            super();
+            
+            const query = this.dataset.query;
+            const closeElement = this.querySelector('.chip-close');
+
+            closeElement.addEventListener('click', () => {
+                console.log(query);
+                const url = new URL(window.location);
+                url.searchParams.delete(query);
+                window.history.pushState({}, '', url);
+                window.location.reload();
+                this.remove();
+            });
+        }
+    }
+    customElements.define('chip-element', ChipElement);
+</script>
+
+<chip-element data-query={query} class="chip">
+    <span class="chip-text">{text}</span>
+    <span class="chip-close">
+        <CloseIcon/>
+    </span>
+</chip-element>
+
+<style>
+    .chip {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        padding: 0.8rem 2rem;
+        background-color: #792EDE;
+        color: #fff;
+        border-radius: 999px;
+    }
+
+    .chip-text {
+        margin-right: 0.5rem;
+        font-size: 14px;
+        text-transform: capitalize;
+    }
+
+    .chip-close {
+        cursor: pointer;
+        opacity: 1;
+        transition: opacity 0.2s ease-in-out;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+</style>

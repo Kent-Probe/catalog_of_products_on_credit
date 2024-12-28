@@ -1,8 +1,29 @@
 ---
 import Arrow from "@/icon/Arrow.astro";
-import FilterSlideSelector from "./FilterSlideSelector.astro";
 import Accordion from "@/layouts/Accordion.astro";
 import FilterIcon from "@/icon/FilterIcon.astro";
+import FilterSlideRam from "@/components/filters/FilterSlideRam.astro";
+import FilterSlideRom from "@/components/filters/FilterSlideRom.astro";
+import FilterSlideCamera from "@/components/filters/FilterSlideCamera.astro";
+import FilterSlideBaterry from "@/components/filters/FilterSlideBaterry.astro";
+
+let searchTerm = ''
+let financials: string[] = [];
+let ram: string[] = [];
+let rom: string[] = [];
+let baterry: string[] = [];
+let camera: string[] = [];
+
+if (Astro.request.url) {
+    const url = new URL(Astro.request.url);
+    searchTerm = url.searchParams.get('search') || '';
+    financials = url.searchParams.get('financials')?.toLowerCase().split(',') || [];
+    ram = url.searchParams.get('ram')?.split(',') || [];
+    rom = url.searchParams.get('rom')?.split(',') || [];
+    baterry = url.searchParams.get('battery')?.split(',') || [];
+    camera = url.searchParams.get('camera')?.split(',') || [];    
+}
+
 ---
 
 <script>
@@ -26,53 +47,122 @@ import FilterIcon from "@/icon/FilterIcon.astro";
         }
       });
     }
+
+    const buttonFilter = document.querySelector("[data-button='filter']");
+    const formFilter = document.querySelector("[data-form-filter]");
+    formFilter.addEventListener("submit", (e) => {
+        e.preventDefault();
+        window.location.reload();
+    });
+    buttonFilter.addEventListener("click", (e) => {
+        let filtersBase = {}
+        let financials = [];
+        const celya = document.querySelector("[data-checkbox-celya]").checked;
+        const krediya = document.querySelector("[data-checkbox-krediya]").checked;
+        const alocred = document.querySelector("[data-checkbox-alocred]").checked;
+
+        const minValRam = parseInt(document.querySelector("[data-input-minram]").value);
+        const maxValRam = parseInt(document.querySelector("[data-input-maxram]").value);
+
+        const minValRom = parseInt(document.querySelector("[data-input-minrom]").value);
+        const maxValRom = parseInt(document.querySelector("[data-input-maxrom]").value);
+
+        const minValBaterry = parseInt(document.querySelector("[data-input-minbaterry]").value);
+        const maxValBaterry = parseInt(document.querySelector("[data-input-maxbaterry]").value);
+
+        const minValCamera = parseInt(document.querySelector("[data-input-mincamera]").value);
+        const maxValCamera = parseInt(document.querySelector("[data-input-maxcamera]").value);
+
+        if(celya){
+            financials.push("Celya");
+        }
+        if(krediya){
+            financials.push("Krediya");
+        }
+        if(alocred){
+            financials.push("Alo Cred");
+        }
+
+        if(financials.length > 0){
+            filtersBase = {...filtersBase, financials: financials}
+        }
+
+        if(minValRam !== 0 && maxValRam !== 0 && minValRam !== maxValRam){
+            filtersBase = {...filtersBase, ram: {min: minValRam, max: maxValRam}}
+        }
+
+        if(minValRom !== 0 && maxValRom !== 0 && minValRom !== maxValRom){
+            filtersBase = {...filtersBase, rom: {min: minValRom, max: maxValRom}}
+        }
+
+        if(minValBaterry !== 0 && maxValBaterry !== 0 && minValBaterry !== maxValBaterry){
+            filtersBase = {...filtersBase, battery: {min: minValBaterry, max: maxValBaterry}}
+        }
+
+        if(minValCamera !== 0 && maxValCamera !== 0 && minValCamera !== maxValCamera){
+            filtersBase = {...filtersBase, camera: {min: minValCamera, max: maxValCamera}}
+        }
+        const url = new URL(window.location);
+        if(JSON.stringify(filtersBase) === "{}"){
+            url.searchParams.delete("financials");
+            url.searchParams.delete("ram");
+            url.searchParams.delete("rom");
+            url.searchParams.delete("battery");
+            url.searchParams.delete("camera");
+        }else{
+            const paramToSend = Object.entries(filtersBase).map(([key, value]) => {
+                let param = "";
+                if(key === "financials"){
+                    param = `${value.join(",")}`;
+                }else{
+                    param = `${value.min},${value.max}`;
+                }
+                url.searchParams.set(key, param);
+            });
+        }
+        window.history.pushState({}, '', url);
+    });
 </script>
     
 
 <div class="container">
-    <Accordion title="Financieras">
-        <label class="container_cb">Celya
-            <input type="checkbox">
-            <span class="checkmark"></span>
-        </label>
-        <label class="container_cb">Krediya
-            <input type="checkbox">
-            <span class="checkmark"></span>
-        </label>
-        <label class="container_cb">Alo Cred
-            <input type="checkbox">
-            <span class="checkmark"></span>
-        </label>
-    </Accordion>
-
-    <Accordion title="RAM">
-        <FilterSlideSelector id="ram" typeFilter="GB" min={2} max={512} title="Seleccione el rango de RAM" />
-    </Accordion>
-
-    <Accordion title="Almacenamiento">
-        <FilterSlideSelector id="rom" typeFilter="GB" min={8} max={1024} title="Seleccione el rango de Almacenamiento" />
-    </Accordion>
-
-    <Accordion title="Cámara principal">
-        <FilterSlideSelector id="cam-principal" typeFilter="MP" min={5} max={300} title="Seleccione el rango de MP" />
-    </Accordion>
-
-    <Accordion title="Cámara frontal">
-        <FilterSlideSelector id="cam-front" typeFilter="MP" min={5} max={200} title="Seleccione el rango de MP" />
-    </Accordion>
-
-    <Accordion title="Pantalla">
-        <FilterSlideSelector id="screen" typeFilter="pulgadas" min={4} max={10} title="Seleccione el rango en pulgadas" />
-    </Accordion>
-
-    <Accordion title="Batería">
-        <FilterSlideSelector id="baterry" typeFilter="mAh" min={2000} max={10000} title="Seleccione el rango de mAh" />
-    </Accordion>
-
-    <button>
-        <FilterIcon />
-        Aplicar Filtros
-    </button>
+    <form data-form-filter action="" method="get">
+        <Accordion title="Financieras">
+            <label class="container_cb">Celya
+                <input checked={financials.includes("celya")} data-checkbox-celya type="checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container_cb">Krediya
+                <input checked={financials.includes("krediya")} data-checkbox-krediya type="checkbox">
+                <span class="checkmark"></span>
+            </label>
+            <label class="container_cb">Alo Cred
+                <input checked={financials.includes("alo cred")} data-checkbox-alocred type="checkbox">
+                <span class="checkmark"></span>
+            </label>
+        </Accordion>
+    
+        <Accordion title="RAM">
+            <FilterSlideRam id="ram" typeFilter="GB" min={2} max={512} minCurrent={ram[0] ?? 2} maxCurrent={ram[1] ?? 512} title="Seleccione el rango de RAM" />
+        </Accordion>
+    
+        <Accordion title="Almacenamiento">
+            <FilterSlideRom id="rom" typeFilter="GB" min={8} max={1024} minCurrent={rom[0] ?? 8} maxCurrent={rom[1] ?? 1024} title="Seleccione el rango de Almacenamiento" />
+        </Accordion>
+    
+        <Accordion title="Cámara principal">
+            <FilterSlideCamera id="cam-principal" typeFilter="MP" min={5} max={300} minCurrent={camera[0] ?? 5} maxCurrent={camera[1] ?? 300} title="Seleccione el rango de MP" />
+        </Accordion>
+    
+        <Accordion title="Batería">
+            <FilterSlideBaterry steper={50} id="baterry" typeFilter="mAh" min={2000} max={10000} minCurrent={baterry[0] ?? 2000} maxCurrent={baterry[1] ?? 10000} title="Seleccione el rango de mAh" />
+        </Accordion>
+    
+        <button data-button="filter" type="submit" class="btn-filter">
+            <FilterIcon />
+            Aplicar Filtros
+        </button>
+    </form>
 </div>
 
 <style>

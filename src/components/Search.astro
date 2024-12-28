@@ -2,8 +2,8 @@
 import SearchIcon from '@/icon/SearchIcon.astro';
 ---
 <search>
-    <form action="/search" method="get">
-        <input type="text" name="q" placeholder="Search..." />
+    <form data-form-search action="" method="get">
+        <input data-input-search type="text" name="search" placeholder="Search..." />
         <button type="submit">
             <SearchIcon size="12px" fill="#fff"/>
         </button>

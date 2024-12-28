@@ -1,7 +1,44 @@
 ---
+import Chip from "@/components/Chip.astro";
 import Filter from "@/components/Filter.astro";
 import Products from "@/components/Products.astro";
-import Pagination from "./Pagination.astro";
+import LinkWhatsapp from "./LinkWhatsapp.astro";
+
+const url = new URL(Astro.request.url);
+
+const search = url.searchParams.get('search');
+const financials = url.searchParams.get('financials');
+const ram = url.searchParams.get('ram');
+const rom = url.searchParams.get('rom');
+const battery = url.searchParams.get('battery');
+const camera = url.searchParams.get('camera');
+
+const chips = []
+
+if(search){
+    chips.push({text: search, query: "search"})
+}
+
+if(financials){
+    chips.push({text: "Financieras", query: "financials"})
+}
+
+if(ram){
+    chips.push({text: "RAM", query: "ram"})
+}
+
+if(rom){
+    chips.push({text: "ROM", query: "rom"})
+}
+
+if(battery){
+    chips.push({text: "Batería", query: "battery"})
+}
+
+if(camera){
+    chips.push({text: "Cámara", query: "camera"})
+}
+
 ---
 
 <section>
@@ -9,12 +46,25 @@ import Pagination from "./Pagination.astro";
         <Filter />
     </div>
     <div class="products-conteainer">
+        <div class="chips-container">
+            {chips.map(chip => (
+                <Chip query={chip.query} text={chip.text} />
+            ))}
+        </div>
         <Products />
-        <Pagination />
+        <!-- <Pagination /> -->
     </div>
 </section> 
 
+<LinkWhatsapp />
+
 <style>
+    .chips-container{
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
     section {
         display: flex;
         flex-direction: row;
@@ -25,6 +75,7 @@ import Pagination from "./Pagination.astro";
     }
 
     .filter{
+        display: none;
         width: 40rem;
     }
 
@@ -35,5 +86,11 @@ import Pagination from "./Pagination.astro";
         display: flex;
         flex-direction: column;
         gap: 2rem;
+    }
+
+    @media only screen and (min-width: 1200px) {
+        .filter{
+            display: block;
+        }
     }
 </style>

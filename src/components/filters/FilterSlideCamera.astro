@@ -1,0 +1,251 @@
+---
+type FilterSliderSelectorProps = {
+    id: string;
+    min: number;
+    max: number;
+    typeFilter: string;
+    steper: number;
+    title: string;
+    minCurrent: number;
+    maxCurrent: number;
+} 
+
+const { min, max, typeFilter, steper = 2, title, id, minCurrent, maxCurrent }: FilterSliderSelectorProps = Astro.props;
+
+---
+
+<meta name="typeFilter-camera" content={typeFilter} />
+
+<div class={`double-slider-box`}>
+    <h3 class="range-title">{title}</h3>
+    <div class="range-slider">
+        <span class="slider-track-camera"></span>
+        <input data-input-mincamera type="range" name="min_val" class="min-val-camera" min={min} max={max} value={minCurrent} step={steper} id="range-slider-ram">
+        <input data-input-maxcamera type="range" name="max_val" class="max-val-camera" min={min} max={max} value={maxCurrent} step={steper} id="range-slider-ram">
+        <div class="tooltip min-tooltip-camera">{minCurrent} {typeFilter}</div>
+        <div class="tooltip max-tooltip-camera">{maxCurrent} {typeFilter}</div>
+    </div>
+    <div class="input-box">
+        <div class="min-box">
+            <div class="input-wrap">
+                <input type="text" name="min_input" value={minCurrent} class="input-field min-input-camera">
+                <span class="input-addon">{typeFilter}</span>
+            </div>
+        </div>
+        <div class="max-box">
+            <div class="input-wrap">
+                <input type="text" name="max_input" value={maxCurrent} class="input-field max-input-camera">
+                <span class="input-addon">{typeFilter}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const typeFilter = document.querySelector('meta[name="typeFilter-camera"]').content;
+
+    const minVal = document.querySelector(".min-val-camera");
+    const maxVal = document.querySelector(".max-val-camera");
+    const inputMin = document.querySelector(".min-input-camera");
+    const inputMax = document.querySelector(".max-input-camera");
+    const minTooltip = document.querySelector(".min-tooltip-camera")
+    const maxTooltip = document.querySelector(".max-tooltip-camera")
+    const minGap = 0;
+    const range = document.querySelector(".slider-track-camera")
+    const sliderMinValue = parseInt(minVal.min);
+    const sliderMaxValue = parseInt(maxVal.max);
+
+    slideMinCamera();
+    slideMaxCamera(); 
+
+    function setArea(){
+        range.style.left = `${
+            ((minVal.value - sliderMinValue) / (sliderMaxValue - sliderMinValue)) * 100
+        }%`;
+        range.style.left = (minVal.value / sliderMaxValue) * 100 + "%";
+        minTooltip.style.left = (minVal.value / sliderMaxValue) * 100 + "%";
+        range.style.right = `${
+            100 -
+            ((maxVal.value - sliderMinValue) / (sliderMaxValue - sliderMinValue)) * 100
+        }%`;
+        maxTooltip.style.right = 100 - (maxVal.value / sliderMaxValue) * 100 + "%";
+    }
+        
+    function slideMinCamera(){
+        let gap = parseInt(maxVal.value) - parseInt(minVal.value);
+        if(gap <= minGap){
+            minVal.value = parseInt(maxVal.value) - minGap;
+        }
+        minTooltip.innerHTML = minVal.value + " " + typeFilter;
+        inputMin.value = minVal.value;
+        setArea();
+    }
+
+    function slideMaxCamera(){
+        let gap = parseInt(maxVal.value) - parseInt(minVal.value);
+        if(gap <= minGap){
+            maxVal.value = parseInt(minVal.value) + minGap;
+        }
+        maxTooltip.innerHTML = maxVal.value + " " + typeFilter;
+        inputMax.value = maxVal.value;
+        setArea();
+    }
+
+    function setMinInputCamera(){
+        let min = parseInt(inputMin.value);
+        if(min < sliderMinValue){
+            inputMin.value = sliderMinValue;
+        }
+        minVal.value = inputMin.value;
+        slideMinCamera();
+    }
+
+    function setMaxInputCamera(){
+        let max = parseInt(inputMax.value);
+        if(max > sliderMaxValue){
+            inputMax.value = sliderMaxValue;
+        }
+        maxVal.value = inputMax.value;
+        slideMaxCamera();
+    }
+
+    minVal.addEventListener("input", slideMinCamera);
+    maxVal.addEventListener("input", slideMaxCamera);
+
+    inputMin.addEventListener("change", setMinInputCamera);
+    inputMax.addEventListener("change", setMaxInputCamera);
+</script>
+
+<style>
+    /* RANGE -------------------- SLIDE */
+    .double-slider-box{
+        padding-inline: 2rem;
+    }
+
+    h3.range-title{
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 5rem;
+    }
+
+    .range-slider{
+        position: relative;
+        width: 100%;
+        height: 5px;
+        margin: 30px 0;
+        background-color: #8a8a8a;
+    }
+
+    .slider-track-camera{
+        height: 100%;
+        position: absolute;
+        background-color: rebeccapurple;
+    }
+
+    .range-slider input{
+        position: absolute;
+        width: 100%;
+        background: none;
+        pointer-events: none;
+        top: 50%;
+        transform: translateY(-50%);
+        appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb{
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+        border: 3px solidr #fff;
+        background: #fff;
+        pointer-events: auto;
+        appearance: none;
+        cursor: pointer;
+        box-shadow: 0 .125rem .5625rem -0.125rem rgba(0, 0, 0, .25);
+    }
+
+    .tooltip{
+        padding: .25rem .5rem;
+        border: 0;
+        background: #373f50;
+        color: #fff;
+        font-size: 1.2rem;
+        line-height: 1.2;
+        border-radius: .25rem;
+        bottom: 120%;
+        display: block;
+        position: absolute;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .min-tooltip-camera{
+        left: 50%;
+        transform:  translateX(-50%) translateY(-100%);
+        z-index: 5;
+    }
+
+    .max-tooltip-camera{
+        right: 50%;
+        transform:  translateX(50%) translateY(-100%);
+    }
+
+    .input-box{
+        display: flex;
+    }
+
+    .min-box, .max-box{
+        width: 50%;
+    }
+
+    .min-box{
+        padding-right: .5rem;
+        margin-right: .5rem;
+    }
+
+    .input-wrap{    
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .input-addon{
+        display: flex;
+        align-items: center;
+        padding: 1rem 1.6rem;
+        font-size: 1.5rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #4b566b;
+        text-align: center;
+        white-space: nowrap;
+        background-color: #fff;
+        border: 1px solid #d5d7e5;
+        border-radius: .25rem;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .input-field{
+        margin-left: -1px;
+        padding: 1rem 1.6rem;
+        font-size: 1.5rem;
+        border-radius: .25rem;
+        position: relative;
+        flex: 1 1 auto;
+        width: 1%;
+        min-width: 0;
+        color: #4b566b;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #d4d7e5;
+        border-top-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .input-field:focus{
+        outline: none;
+    }
+</style>

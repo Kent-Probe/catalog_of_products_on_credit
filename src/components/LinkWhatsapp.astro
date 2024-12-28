@@ -1,0 +1,26 @@
+---
+import WhatsAppIcon from "@/icon/WhatsAppIcon.astro";
+---
+
+<a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">
+    <WhatsAppIcon />
+</a>
+
+<style>
+    a{
+        --padding-whatsapp: 2rem;
+        position: fixed;
+        right: var(--padding-whatsapp);
+        bottom: var(--padding-whatsapp);
+
+        cursor: pointer;
+
+        z-index: 1000;
+        opacity: 1;
+        transition: transform .3s ease-in-out;
+
+        &:hover{
+            transform: scale(1.2) skew(-10deg);
+        }
+    }
+</style>

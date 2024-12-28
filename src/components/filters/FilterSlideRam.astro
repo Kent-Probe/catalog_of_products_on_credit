@@ -6,29 +6,57 @@ type FilterSliderSelectorProps = {
     typeFilter: string;
     steper: number;
     title: string;
+    minCurrent: number;
+    maxCurrent: number;
 } 
 
-const { min, max, typeFilter, steper = 2, title, id }: FilterSliderSelectorProps = Astro.props;
+const { min, max, typeFilter, steper = 2, title, id, minCurrent, maxCurrent }: FilterSliderSelectorProps = Astro.props;
 
 ---
-<script>
-    const typeFilter = document.querySelector('meta[name="typeFilter"]').content;
 
-    const minVal = document.querySelector(".min-val");
-    const maxVal = document.querySelector(".max-val");
-    const inputMin = document.querySelector(".min-input");
-    const inputMax = document.querySelector(".max-input");
-    const minTooltip = document.querySelector(".min-tooltip")
-    const maxTooltip = document.querySelector(".max-tooltip")
+<meta name="typeFilter-ram" content={typeFilter} />
+
+<div class={`double-slider-box`}>
+    <h3 class="range-title">{title}</h3>
+    <div class="range-slider">
+        <span class="slider-track-ram"></span>
+        <input data-input-minram type="range" name="min_val" class="min-val-ram" min={min} max={max} value={minCurrent} step={steper} id="range-slider-ram">
+        <input data-input-maxram type="range" name="max_val" class="max-val-ram" min={min} max={max} value={maxCurrent} step={steper} id="range-slider-ram">
+        <div class="tooltip min-tooltip-ram">{minCurrent} {typeFilter}</div>
+        <div class="tooltip max-tooltip-ram">{maxCurrent} {typeFilter}</div>
+    </div>
+    <div class="input-box">
+        <div class="min-box">
+            <div class="input-wrap">
+                <input type="text" value={minCurrent} name="min_input" class="input-field min-input-ram">
+                <span class="input-addon">{typeFilter}</span>
+            </div>
+        </div>
+        <div class="max-box">
+            <div class="input-wrap">
+                <input type="text" value={maxCurrent} name="max_input" class="input-field max-input-ram">
+                <span class="input-addon">{typeFilter}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const typeFilter = document.querySelector('meta[name="typeFilter-ram"]').content;
+
+    const minVal = document.querySelector(".min-val-ram");
+    const maxVal = document.querySelector(".max-val-ram");
+    const inputMin = document.querySelector(".min-input-ram");
+    const inputMax = document.querySelector(".max-input-ram");
+    const minTooltip = document.querySelector(".min-tooltip-ram")
+    const maxTooltip = document.querySelector(".max-tooltip-ram")
     const minGap = 0;
-    const range = document.querySelector(".slider-track")
+    const range = document.querySelector(".slider-track-ram")
     const sliderMinValue = parseInt(minVal.min);
     const sliderMaxValue = parseInt(maxVal.max);
 
-    window.onload = function(){
-        slideMin();
-        slideMax();
-    }
+    slideMinRam();
+    slideMaxRam();
 
     function setArea(){
         range.style.left = `${
@@ -43,7 +71,7 @@ const { min, max, typeFilter, steper = 2, title, id }: FilterSliderSelectorProps
         maxTooltip.style.right = 100 - (maxVal.value / sliderMaxValue) * 100 + "%";
     }
         
-    function slideMin(){
+    function slideMinRam(){
         let gap = parseInt(maxVal.value) - parseInt(minVal.value);
         if(gap <= minGap){
             minVal.value = parseInt(maxVal.value) - minGap;
@@ -53,7 +81,7 @@ const { min, max, typeFilter, steper = 2, title, id }: FilterSliderSelectorProps
         setArea();
     }
 
-    function slideMax(){
+    function slideMaxRam(){
         let gap = parseInt(maxVal.value) - parseInt(minVal.value);
         if(gap <= minGap){
             maxVal.value = parseInt(minVal.value) + minGap;
@@ -63,57 +91,30 @@ const { min, max, typeFilter, steper = 2, title, id }: FilterSliderSelectorProps
         setArea();
     }
 
-    function setMinInput(){
+    function setMinInputRam(){
         let min = parseInt(inputMin.value);
         if(min < sliderMinValue){
             inputMin.value = sliderMinValue;
         }
         minVal.value = inputMin.value;
-        slideMin();
+        slideMinRam();
     }
 
-    function setMaxInput(){
+    function setMaxInputRam(){
         let max = parseInt(inputMax.value);
         if(max > sliderMaxValue){
             inputMax.value = sliderMaxValue;
         }
         maxVal.value = inputMax.value;
-        slideMax();
+        slideMaxRam();
     }
 
-    minVal.addEventListener("input", slideMin);
-    maxVal.addEventListener("input", slideMax);
+    minVal.addEventListener("input", slideMinRam);
+    maxVal.addEventListener("input", slideMaxRam);
 
-    inputMin.addEventListener("change", setMinInput);
-    inputMax.addEventListener("change", setMaxInput);
+    inputMin.addEventListener("change", setMinInputRam);
+    inputMax.addEventListener("change", setMaxInputRam);
 </script>
-
-<meta name="typeFilter" content={typeFilter} />
-
-<div class={`double-slider-box-${id}`}>
-    <h3 class="range-title">{title}</h3>
-    <div class="range-slider">
-        <span class="slider-track"></span>
-        <input type="range" name="min_val" class="min-val" min={min} max={max} value="16" step={steper} id="range-slider-ram">
-        <input type="range" name="max_val" class="max-val" min={min} max={max} value="0" step={steper} id="range-slider-ram">
-        <div class="tooltip min-tooltip"></div>
-        <div class="tooltip max-tooltip"></div>
-    </div>
-    <div class="input-box">
-        <div class="min-box">
-            <div class="input-wrap">
-                <input type="text" name="min_input" class="input-field min-input">
-                <span class="input-addon">{typeFilter}</span>
-            </div>
-        </div>
-        <div class="max-box">
-            <div class="input-wrap">
-                <input type="text" name="max_input" class="input-field max-input">
-                <span class="input-addon">{typeFilter}</span>
-            </div>
-        </div>
-    </div>
-</div>
 
 <style>
     /* RANGE -------------------- SLIDE */
@@ -135,7 +136,7 @@ const { min, max, typeFilter, steper = 2, title, id }: FilterSliderSelectorProps
         background-color: #8a8a8a;
     }
 
-    .slider-track{
+    .slider-track-ram{
         height: 100%;
         position: absolute;
         background-color: rebeccapurple;
@@ -178,13 +179,13 @@ const { min, max, typeFilter, steper = 2, title, id }: FilterSliderSelectorProps
         white-space: nowrap;
     }
 
-    .min-tooltip{
+    .min-tooltip-ram{
         left: 50%;
         transform:  translateX(-50%) translateY(-100%);
         z-index: 5;
     }
 
-    .max-tooltip{
+    .max-tooltip-ram{
         right: 50%;
         transform:  translateX(50%) translateY(-100%);
     }

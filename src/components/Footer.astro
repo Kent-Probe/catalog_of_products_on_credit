@@ -1,11 +1,19 @@
 ---
 import Favicon from "@/icon/favicon.astro";
+import LogoKent from "@/icon/LogoKent.astro";
 ---
 
 <footer>
-    <div class="logo-container">
-        <Favicon size={70} />
-        <h1>Samicel</h1>
+    <div class="logs-container">
+        <div class="logo-container">
+            <Favicon size={70} />
+            <h1>Samicel</h1>
+        </div>
+        <div class="logo-container">
+            <a target="_blank" href="https://github.com/Kent-Probe">
+                <LogoKent />
+            </a>
+        </div>
     </div>
     <div class="links-container">
         <div>
@@ -109,5 +117,12 @@ import Favicon from "@/icon/favicon.astro";
                 }
             }
         }
+    }
+
+    .logs-container{
+        display: flex;
+        flex-direction: row;
+        gap: 4rem;
+        flex-wrap: wrap;
     }
 </style>

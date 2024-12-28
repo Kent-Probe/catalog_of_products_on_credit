@@ -1,32 +1,91 @@
 ---
 import CardProduct from "@/components/CardProduct.astro";
-import seed from "@/seed/seed.json";
+import {products} from "@/seed/seed.json";
 
-const products = seed.products;
+let searchTerm = ''
+let financials: string[] = [];
+let ram: string[] = [];
+let rom: string[] = [];
+let battery: string[] = [];
+let camera: string[] = [];
+
+if (Astro.request.url) {
+    const url = new URL(Astro.request.url);
+    searchTerm = url.searchParams.get('search') || '';
+    financials = url.searchParams.get('financials')?.toLowerCase().split(',') || [];
+    ram = url.searchParams.get('ram')?.split(',') || [];
+    rom = url.searchParams.get('rom')?.split(',') || [];
+    battery = url.searchParams.get('battery')?.split(',') || [];
+    camera = url.searchParams.get('camera')?.split(',') || [];    
+}
+
+const filteredProducts = products.filter(product => {
+    let match = true;
+    if(!product.model.toLowerCase().includes(searchTerm.toLowerCase())){
+        match = false;
+    }
+    if(financials.length > 0){
+        if(!product.financials.some(financial => financials.includes(financial.toLocaleLowerCase()))){
+            match = false;
+        }
+    }
+    if(ram.length > 0){
+        if(product.ram_memory_gb < parseInt(ram[0]) || product.ram_memory_gb > parseInt(ram[1])){
+            match = false;
+        }
+    }
+    if(rom.length > 0){
+        if(product.rom_memory_gb < parseInt(rom[0]) || product.rom_memory_gb > parseInt(rom[1])){
+            match = false;
+        }
+    }
+    if(battery.length > 0){
+        if(product.battery_mah < parseInt(battery[0]) || product.battery_mah > parseInt(battery[1])){
+            match = false;
+        }
+    }
+    if(camera.length > 0){
+        if(product.rear_camera_mp < parseInt(camera[0]) || product.rear_camera_mp > parseInt(camera[1])){
+            match = false;
+        }
+    }
+    return match;
+});
 ---
 
-<div class="products">
+<div data-container-products class="products">
     {
-        products.map(product => {
+        filteredProducts.map(product => {
             return <CardProduct product={product} />;
         })
     }
 </div>
 
+<script>
+    const searchInput = document.querySelector('[data-input-search]');
+    const formSend = document.querySelector('[data-form-search]');
+    formSend.addEventListener('submit', (e) => {
+        e.preventDefault();
+        window.location.reload();
+    });
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value;
+        const url = new URL(window.location);
+        url.searchParams.set('search', searchTerm);
+        window.history.pushState({ }, '', url);
+    });
+</script>
+
 
 <style>
     .products {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 
         gap: 2rem;
 
         width: 100%;
 
         margin-bottom: 2rem;
-    }
-
-    .pagination{
-        background-color: red;
     }
 </style>
