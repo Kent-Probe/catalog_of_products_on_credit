@@ -1,0 +1,720 @@
+---
+import Footer from '@/components/Footer.astro'
+import Header from '@/components/Header.astro'
+import { app } from '@/firebase/server'
+import BatteryIcon from '@/icon/BatteryIcon.astro'
+import CameraFrontIcon from '@/icon/CameraFrontIcon.astro'
+import CameraIcon from '@/icon/CameraIcon.astro'
+import CloseIcon from '@/icon/closeIcon.astro'
+import DeviceIcon from '@/icon/DeviceIcon.astro'
+import HardDiskIcon from '@/icon/HardDiskIcon.astro'
+import MemoryIcon from '@/icon/MemoryIcon.astro'
+import ProcessorIcon from '@/icon/ProcessorIcon.astro'
+import UploadImage from '@/icon/UploadImage.astro'
+import Layout from '@/layouts/Layout.astro'
+import { getAuth } from 'firebase-admin/auth'
+
+if (!Astro.cookies.has("__session")) {
+  return Astro.redirect("/login");
+}
+
+--- 
+
+<Layout title="Crear Crédito">
+    <Header />
+    <main>
+        <h1>Crear un crédito</h1>
+        <p>Completa el formulario para solicitar un crédito</p>
+        <br>
+        <div class="danger">
+            <p><strong>Error! </strong><span class="error"></span></p>
+        </div>
+        <form action="/api/catalog" method="post" class="form-create-credit">
+            <div class="form-data-device">
+                <label id="cel-img-label" class="device__image" for="celImg">
+                    <input type="file" id="celImg" name="celImg" accept="image/png, image/jpeg" hidden/>
+                    <div id="img-view" class="img-view">
+                        <UploadImage />
+                        <p>Arrastra o click<br>Para subir</p>
+                        <span>Subir cualquier imagen desde el escritorio</span>
+                    </div>
+                </label>
+                <div class="device__data">
+                    <div class="data__first">
+                        <div class="container-input">
+                            <label for="brand">Marca</label>
+                            <input name="brand" id="brand" type="text" />
+                        </div>
+                        <div class="container-input">
+                            <label for="model">Modelo</label>
+                            <input name="model" id="model" type="text" />
+                        </div>
+                    </div>
+                    <div class="data__last">
+                        <div class="container-input">
+                            <label for="camera">
+                                <CameraIcon />
+                            </label>
+                            <input name="camera" id="camera" type="number" />
+                        </div>
+                        <div class="container-input">
+                            <label for="cameraFront">
+                                <CameraFrontIcon />
+                            </label>
+                            <input name="cameraFront" id="cameraFront" type="number" />
+                        </div>
+                        <div class="container-input">
+                            <label for="disk">
+                                <HardDiskIcon />
+                            </label>
+                            <input name="disk" id="disk" type="number" />
+                        </div>
+                        <div class="container-input">
+                            <label for="memory">
+                                <MemoryIcon />
+                            </label>
+                            <input name="memory" id="memory" type="number" />
+                        </div>
+                        <div class="container-input">
+                            <label for="processor">
+                                <ProcessorIcon />
+                            </label>
+                            <input name="processor" id="processor" type="text" />
+                        </div>
+                        <div class="container-input">
+                            <label for="inches">
+                                <DeviceIcon />
+                            </label>
+                            <input name="inches" id="inches" type="number" />
+                        </div>
+                        <div class="container-input">
+                            <label for="battery">
+                                <BatteryIcon />
+                            </label>
+                            <input name="battery" id="battery" type="number" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-data-financial">
+                <div class="form-data-price">
+                    <label for="price">Precio</label>
+                    <input type="number" id="price" name="price" />
+                </div>
+                <div class="form-data-financials">
+                    <div class="financials__title">
+                        <label for="financials">Financieras</label>
+                        <input placeholder="Seleccione minimo una financiera" readonly id="financials" name="financials" type="text">
+                    </div>
+                    <div class="financials__checkbox">
+                        <label for="celya" class="container">Celya
+                            <input class="checkbox" id="celya" name="celya" type="checkbox" value="Celya">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label for="krediya" class="container">Krediya
+                            <input class="checkbox" id="krediya" name="krediya" type="checkbox" value="Krediya">
+                            <span class="checkmark"></span>
+                        </label>
+                        <label for="aloCred" class="container">Alo Cred
+                            <input class="checkbox" id="aloCred" name="aloCred" type="checkbox" value="Alo Cred">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-data-quotas">
+                <div class="quotas__initial">
+                    <label for="initial">Cuota inicial</label>
+                    <input type="number" id="initial" name="initial" />
+                </div>
+                <div class="quotas__quotas">
+                    <div>
+                        <label for="quotas">Cuotas:</label>
+                        <input readonly placeholder="Agrege cuotas" type="text" id="quotas" name="quotas" />
+                        <span class="close">
+                            <CloseIcon />
+                        </span>
+                    </div>
+                    <div class="quotas__modal">
+                        <label for="addQuota">Cuotas: </label>
+                        <input type="number" id="addQuota" name="addQuota" />
+                        <label for="addQuotaPrice">Precio: </label>
+                        <input type="number" id="addQuotaPrice" name="addQuotaPrice" />
+                        <button class="addQuotaBtn" type="button">+</button>
+                    </div>
+                </div>
+            </div>
+            <button class="button-send-data" type="submit">Crear crédito</button>
+        </form>
+    </main>
+    <Footer />
+</Layout>
+
+<script>
+    const dropArea = document.getElementById("cel-img-label") as HTMLLabelElement
+    const inputField = document.getElementById("celImg") as HTMLInputElement
+    const imageView = document.getElementById("img-view") as HTMLDivElement
+    const form = document.querySelector(".form-create-credit") as HTMLFormElement
+    const cleanFieldQuotas = document.querySelector(".close") as HTMLSpanElement
+
+    const quotas = document.getElementById("quotas") as HTMLInputElement
+    const quotasContianer = document.querySelector(".quotas__quotas") as HTMLDivElement
+    const addQuotaBtn = document.querySelector(".addQuotaBtn") as HTMLButtonElement
+
+    const financials = document.getElementById("financials") as HTMLInputElement
+    const financialsContainer = document.querySelector(".form-data-financials") as HTMLDivElement
+
+    const checkboxs = document.querySelectorAll(".checkbox") as NodeListOf<HTMLInputElement>
+
+    cleanFieldQuotas.addEventListener("click", () => {
+        quotas.value = "";
+    })
+
+    addQuotaBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const addQuota = document.getElementById("addQuota") as HTMLInputElement
+        const addQuotaPrice = document.getElementById("addQuotaPrice") as HTMLInputElement
+        if(addQuota.value === "" || addQuotaPrice.value === "") return;
+        let value = `${addQuota.value}-${addQuotaPrice.value}`;
+        value = quotas.value + ", " + value;
+        if (value.startsWith(', ')) { 
+            value = value.slice(2, value.length);
+        }
+        quotas.value = value;
+        addQuota.value = "";
+        addQuotaPrice.value = "";
+    })
+    
+    checkboxs.forEach((checkbox) => {
+        checkbox.addEventListener("change", () => {
+            financials.value = "";
+            checkboxs.forEach((checkbox) => {
+                if(checkbox.checked){
+                    financials.value += `${checkbox.value}, `
+                }
+            })
+            financials.value = financials.value.slice(0, -2);
+        })
+    })
+
+    quotas.addEventListener("click", () => {
+        quotasContianer.classList.toggle("active-quotas")
+    })
+
+    financials.addEventListener("click", () => {
+        financialsContainer.classList.toggle("active-financials")
+    })
+
+    window.addEventListener("click", (e) => {
+        if(!financialsContainer.contains(e.target)){
+            financialsContainer.classList.remove("active-financials")
+        }
+
+        if(!quotasContianer.contains(e.target)){
+            quotasContianer.classList.remove("active-quotas")
+        }
+    })
+    
+    function validate(e : HTMLInputElement){
+        let isValid = true;
+        if(e.value === ""){
+            isValid = false;
+            e.classList.add("invalid")
+        }else{
+            e.classList.remove("invalid")
+        }
+        return isValid;
+    }
+
+    const validateForm = () => {
+        let isValid = true;
+        const containerInputs = document.querySelectorAll(".container-input") as NodeListOf<HTMLInputElement>
+        const price = document.getElementById("price") as HTMLInputElement
+        const initial = document.getElementById("initial") as HTMLInputElement
+        
+        isValid = validate(price) && isValid;
+        isValid = validate(initial) && isValid;
+        isValid = validate(financials) && isValid;
+        isValid = validate(quotas) && isValid;
+
+        containerInputs.forEach(containerInput => {
+            const input = containerInput.getElementsByTagName("input")[0]
+            if(input.value === ""){
+                isValid = false;
+                containerInput.classList.add("invalid")
+            }else{
+                containerInput.classList.remove("invalid")
+            }
+        })
+
+        if(inputField.files.length === 0){
+            isValid = false;
+            imageView.classList.add("invalid")
+        }
+
+        if(isValid === false){
+            const errorShow = document.getElementsByClassName("error")[0] as HTMLSpanElement;
+            const errorDiv = document.getElementsByClassName("danger")[0] as HTMLDivElement;
+            errorDiv?.classList.add("dangerVisible");
+            errorShow.textContent = "Fala completar los campos";
+        }
+
+        return isValid;
+    }
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if(!validateForm()) return;
+        const formData = new FormData(form);
+        console.log(Object.fromEntries(formData))
+        const response = await fetch("/api/catalog", {
+            method: "POST",
+            body: JSON.stringify(Object.fromEntries(formData)),
+        })
+        console.log(response)
+    })
+    
+    const uploadImage = () => {
+        let imgLink = URL.createObjectURL(inputField.files[0]);
+        imageView.style.backgroundImage = `url(${imgLink})`;
+        imageView.style.borderStyle = "solid";
+        imageView.textContent = "";
+    }
+
+    inputField?.addEventListener("change", uploadImage)
+
+    dropArea?.addEventListener("dragover", (e) => {
+        e.preventDefault();
+    })
+    dropArea?.addEventListener("drop", (e) => {
+        e.preventDefault();
+        inputField.files = e.dataTransfer?.files;
+        uploadImage();
+    })
+</script>
+
+
+<style>
+    :root{
+        --color-primary: #f0e6e6;
+        --color-secondary: #333;
+
+        --width-right: 600px;
+        --width-left: calc(100% - var(--width-right) - 5rem);
+    }
+
+    .dangerVisible{
+        display: block !important;
+        scale: 1;
+    }
+    
+    .danger {
+        display: block;
+        scale: 1;
+        margin-top: 1.5rem;
+        padding: 1.5rem 1.2rem;
+        background-color: #ffdddd;
+        border-left: 6px solid #f44336;
+
+        transition: display 0.3s ease-in-out allow-discrete,
+                    scale 0.3s ease-in-out;
+
+        @starting-style{
+            display: none;
+            scale: 0.5;
+        }
+
+        & > p{
+            font-size: large !important;
+        }
+    }
+
+    main{
+        margin: 2rem auto;
+        padding: 2rem;
+        max-width: 1500px;
+        width: 100%;
+
+        & h1{
+            font-size: 2.5rem;
+            color: #000;
+        }
+        
+        & p{
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #333;
+        }
+    }
+
+    form{
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .img-view{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+        border: 2px dashed #333;
+        background-color: #f7f8ff;
+        cursor: pointer;
+
+        background-position: center;
+        background-size: cover;
+
+        transition: background-image 0.3s ease-in-out;
+
+        & p{
+            color: #333;
+            text-align: center;
+            font-size: medium;
+            font-weight: 600;
+        }
+        
+        & span{
+            font-size: 1.2rem;
+            color: #777;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        &:first-child{
+            background-color: red;
+        }   
+
+    }
+
+    .form-data-device{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 5rem;
+    }
+
+    .device__image{
+        height: auto;
+        min-width: var(--width-right);
+    }
+
+    .device__data{   
+        display: flex;
+        flex-direction: column;
+        min-width: var(--width-left);
+        gap: 1rem;
+    }
+    
+    .data__first, 
+    .data__last{
+        & .container-input{
+            display: flex;
+            height: 30px;
+            flex-direction: row;
+            gap: 1rem;
+            margin-bottom: 1rem;
+
+            border: 1px solid #333;
+            border-radius: 0.3rem;
+            overflow: hidden;
+
+            &:last-child{
+                margin-bottom: 0;
+            }
+
+            
+            & label{
+                --color-label: #f0e6e6;
+                display: grid;
+                place-items: center;
+                font-size: 1.3rem;
+                text-transform: capitalize;
+                border-right: 1px solid #333;
+                min-width: 70px;
+                background-color: rebeccapurple;
+                color: var(--color-label);
+                fill: var(--color-label);
+            }
+
+            & input {
+                width: 100%;
+                border: none;
+                outline: none;
+            }
+        }
+    }
+
+    .form-data-financial{
+        display: flex;
+        flex-direction: row;
+        gap: 5rem;
+
+        & .form-data-price,
+        .financials__title,
+        & .form-data-financials{
+            display: flex;
+            flex-direction: column;
+            font-size: 1.5rem;
+            gap: 1rem;
+            color: #333;
+            font-weight: 600;
+
+            & input{
+                padding: 0.5rem;
+                border: 1px solid #333;
+                border-radius: 0.3rem;
+                height: calc(35px - 0.5rem);
+                outline: none;
+            }
+        }
+
+        & .form-data-price{
+            min-width: var(--width-right);
+        }
+
+        & .form-data-financials {
+            position: relative;
+            min-width: var(--width-left);
+        
+            & .financials__checkbox{
+                display: none;
+                position: absolute;
+                top: calc(100% + 5px);
+                opacity: 0;
+                z-index: 9999;
+
+                transition: display 0.3s ease-in-out allow-discrete, 
+                            opacity 0.3s ease-in-out;
+
+                flex-direction: column;
+                gap: 0.5rem;
+                color: #f0e6e6;
+                padding: 1.2rem 1.5rem;
+                background-color: #777;
+            
+                & label{
+                    position: relative;
+                    display: block;
+                    gap: 1rem;
+                    min-width: 200px;
+                    align-items: center;
+                    font-size: 1.5rem;
+                    color: #f0e6e6;
+                    padding: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+            
+                    &:hover{
+                        background-color: #333;
+                    }
+            
+                    & input{
+                        display: none;
+                        position: absolute;
+                        opacity: 0;
+                        cursor: pointer;
+                        height: 0;
+                        width: 0;
+                    }
+                }
+            
+                & .container input:checked ~ .checkmark::after {
+                    border-color: #a754fa;
+                }
+            
+                & .checkmark{
+                    position: absolute;
+                    top: calc(50% - 25px/2);
+                    right: 10px;
+                    height: 25px;
+                    width: 25px;
+            
+                    &::after{
+                        content: "";
+                        position: absolute;
+                        display: block;
+                        left: 9px;
+                        top: 5px;
+                        width: 5px;
+                        height: 10px;
+                        border: solid #ccc;
+                        border-width: 0 3px 3px 0;
+                        transform: rotate(45deg);
+                    }
+                }
+            }
+        }
+    }
+
+    .active-financials{
+        &  .financials__checkbox{
+            display: flex !important;
+            opacity: 1 !important;
+
+            @starting-style{
+                display: none;
+                opacity: 0;
+            }
+        }
+    }
+
+    .active-quotas{
+        & .quotas__modal{
+            display: flex !important;
+            opacity: 1 !important;
+            
+            @starting-style{
+                display: none;
+                opacity: 0;
+            }
+        }
+    }
+
+    .form-data-quotas{
+        display: flex;
+        flex-direction: row;
+        gap: 5rem;
+        & label{
+            display: block;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        & input{
+            width: 100%;
+            height: calc(35px - 0.5rem);;
+            padding: 0.5rem;
+            padding-right: 0;
+            border: 1px solid #333;
+            border-radius: 0.3rem;
+            outline: none;
+        }
+    }
+
+    .quotas__initial{
+        min-width: var(--width-right);
+    }
+
+    .quotas__quotas{
+        position: relative;
+        min-width: var(--width-left);
+
+        & .quotas__modal{
+            display: flex;
+            z-index: 999;
+            flex-direction: row;
+            gap: 0.5rem;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: calc(100% + 5px);
+            opacity: 0;
+            
+            transition: display 0.3s ease-in-out allow-discrete, 
+                        opacity 0.3s ease-in-out;
+                        
+            padding: 1.2rem 1.5rem;
+            background-color: #777;
+                        
+            & > label{
+                display: block;
+                margin-bottom: 0;
+                font-size: 1.5rem;
+                color: #f0e6e6 !important;
+                font-weight: 600;
+            }
+
+            & > input{
+                width: 100px;
+                height: 35px;
+                padding: 0.5rem;
+                border: 1px solid #333;
+                border-radius: 0.3rem;
+                outline: none;
+            }
+
+            & > button{
+                width: 35px;
+                height: 35px;
+                padding: 0.5rem;
+                border: none;
+                border-radius: 0.3rem;
+                background-color: rebeccapurple;
+                color: #fff;
+                font-size: 1.5rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background-color 0.3s ease-in-out;
+
+                &:hover{
+                    background-color: #914ad8;
+                }
+            }
+        }
+    }
+
+    .button-send-data{
+        width: 200px;
+        height: 50px;
+        padding: 0.5rem;
+        border: none;
+        border-radius: 0.3rem;
+        background-color: rebeccapurple;
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+
+        &:hover{
+            background-color: #a754fa;
+        }
+    }
+
+    .invalid{
+        border-color: #c91b1b !important;
+    }
+
+    .error{
+        color: #c91b1b !important;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    input:read-only{
+        background-color: #f7f8ff;
+        color: #333;
+        cursor: pointer;
+    }
+
+    .close{
+        position: absolute;
+        display: grid;
+        place-items: center;
+        background-color: #c91b1b;
+        height: 3rem;
+        width: 3rem;
+        right: 0;
+        bottom: 0;
+        border-radius: 5px;
+        cursor: pointer;
+
+        transition: all 0.3s ease-in-out;
+
+        & svg{
+            fill: #fff;
+        }
+
+        &:hover{
+            background-color: #ed2121;
+        }
+    }
+
+</style>
