@@ -6,6 +6,15 @@ const productsValues = seed.products;
 export const products = atom(productsValues);
 export const productsWithFilters = atom(productsValues);
 
+export const loginValues = atom({
+  token: "",
+  user: {
+    username: "",
+    name: "",
+    rol: "",
+  },
+});
+
 export const filters = atom({
   search: "",
   financials: ["Celya", "Krediya", "Alo Cred"],

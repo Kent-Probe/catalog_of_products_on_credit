@@ -1,6 +1,25 @@
 ---
 import CardProduct from "@/components/CardProduct.astro";
-import {products} from "@/seed/seed.json";
+import { app } from "@/firebase/server";
+import { products } from "@/seed/seed.json";
+import { getFirestore } from "firebase-admin/firestore";
+
+type ProductsType = {
+    id: string | number,
+    brand: string,
+    model: string,
+    rear_camera_mp: number,
+    front_camera_mp: number,
+    rom_memory_gb: number,
+    ram_memory_gb: number,
+    processor: string,
+    screen_inches: number,
+    battery_mah: number,
+    financials: string[],
+    savings: number,
+    installments: { quantity: number, price: number}[],
+    isVIsible: boolean
+}
 
 let searchTerm = ''
 let financials: string[] = [];
@@ -8,6 +27,13 @@ let ram: string[] = [];
 let rom: string[] = [];
 let battery: string[] = [];
 let camera: string[] = [];
+
+const db = getFirestore(app);
+const catalog = db.collection("catalog");
+const querySnapshot = await catalog.get();
+const productsDatabase = querySnapshot.docs.map(doc => doc.data()) as ProductsType[];
+
+console.log(productsDatabase[0]);
 
 if (Astro.request.url) {
     const url = new URL(Astro.request.url);
@@ -80,7 +106,7 @@ const filteredProducts = products.filter(product => {
 <style>
     .products {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-template-columns: repeat(3, minmax(300px, 1fr));
 
         gap: 2rem;
 
