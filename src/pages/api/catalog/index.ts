@@ -1,6 +1,9 @@
 import { app } from "@/firebase/server";
 import type { APIRoute } from "astro";
 import { getFirestore } from "firebase-admin/firestore";
+import { promises as fs } from "fs";
+import path from "path";
+import sharp from "sharp";
 
 type typeFormData = {
   brand: string;
@@ -24,13 +27,15 @@ type typeFormData = {
 };
 
 export const POST: APIRoute = async ({ request, redirect }) => {
-  const formData = await request.json().then((formData) => formData as typeFormData);
+  console.log("--------------------------");
+  const formData = await request.formData();
+  const values = Object.fromEntries(formData.entries()) as typeFormData;
 
-  if (JSON.stringify(formData) === "{}") {
+  if (JSON.stringify(values) === "{}") {
     return new Response("No se proporciono datos", { status: 400 });
   }
 
-  const installments = formData.quotas.split(",").map((item) => {
+  const installments = values.quotas.split(",").map((item) => {
     const values = item.split("-");
     return {
       quantity: Number(values[0]),
@@ -38,30 +43,37 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     };
   });
 
-  console.log(formData);
+  const file = values.celImg;
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
 
-  const values = {
-    brand: formData.brand,
-    model: formData.model,
-    rear_camera_mp: Number(formData.camera),
-    front_camera_mp: Number(formData.cameraFront),
-    rom_memory_gb: Number(formData.disk),
-    ram_memory_gb: Number(formData.memory),
-    processor: formData.processor,
-    screen_inches: Number(formData.inches),
-    battery_mah: Number(formData.battery),
-    financials: formData.financials.split(", "),
-    savings: Number(formData.price),
+  const webp = await sharp(buffer).webp().toBuffer();
+  const outputPath = path.join(process.cwd(), "src", "images", "catalog", `${values.brand}-${values.model}.webp`);
+  await fs.writeFile(outputPath, webp);
+
+  const valuesToSend = {
+    brand: values.brand,
+    model: values.model,
+    rear_camera_mp: Number(values.camera),
+    front_camera_mp: Number(values.cameraFront),
+    rom_memory_gb: Number(values.disk),
+    ram_memory_gb: Number(values.memory),
+    processor: values.processor,
+    screen_inches: Number(values.inches),
+    battery_mah: Number(values.battery),
+    financials: values.financials.split(", "),
+    savings: Number(values.price),
     installments: installments,
-    image: formData.celImg,
+    image: `/src/images/catalog/${values.brand}-${values.model}.webp`,
     isVisible: true,
   };
 
   try {
     const db = getFirestore(app);
     const docRef = await db.collection("catalog");
-    await docRef.add(values);
+    await docRef.add(valuesToSend);
   } catch (e) {
+    await fs.unlink(outputPath);
     return new Response("Error durante la creación", { status: 500 });
   }
   return redirect("/");

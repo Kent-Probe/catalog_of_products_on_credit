@@ -18,7 +18,8 @@ type ProductsType = {
     financials: string[],
     savings: number,
     installments: { quantity: number, price: number}[],
-    isVIsible: boolean
+    isVisible: boolean
+    image: string
 }
 
 let searchTerm = ''
@@ -33,8 +34,6 @@ const catalog = db.collection("catalog");
 const querySnapshot = await catalog.get();
 const productsDatabase = querySnapshot.docs.map(doc => doc.data()) as ProductsType[];
 
-console.log(productsDatabase[0]);
-
 if (Astro.request.url) {
     const url = new URL(Astro.request.url);
     searchTerm = url.searchParams.get('search') || '';
@@ -45,8 +44,11 @@ if (Astro.request.url) {
     camera = url.searchParams.get('camera')?.split(',') || [];    
 }
 
-const filteredProducts = products.filter(product => {
+const filteredProducts = productsDatabase.filter(product => {
     let match = true;
+    if(!product.isVisible){
+        return false;
+    }
     if(!product.model.toLowerCase().includes(searchTerm.toLowerCase())){
         match = false;
     }
@@ -77,6 +79,7 @@ const filteredProducts = products.filter(product => {
     }
     return match;
 });
+
 ---
 
 <div data-container-products class="products">
@@ -106,7 +109,7 @@ const filteredProducts = products.filter(product => {
 <style>
     .products {
         display: grid;
-        grid-template-columns: repeat(3, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 
         gap: 2rem;
 

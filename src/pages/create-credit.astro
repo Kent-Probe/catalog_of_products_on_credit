@@ -32,7 +32,7 @@ if (!Astro.cookies.has("__session")) {
         <form action="/api/catalog" method="post" class="form-create-credit">
             <div class="form-data-device">
                 <label id="cel-img-label" class="device__image" for="celImg">
-                    <input type="file" id="celImg" name="celImg" accept="image/png, image/jpeg" hidden/>
+                    <input type="file" id="celImg" name="celImg" accept="image/*" hidden/>
                     <div id="img-view" class="img-view">
                         <UploadImage />
                         <p>Arrastra o click<br>Para subir</p>
@@ -269,7 +269,7 @@ if (!Astro.cookies.has("__session")) {
         console.log(Object.fromEntries(formData))
         const response = await fetch("/api/catalog", {
             method: "POST",
-            body: JSON.stringify(Object.fromEntries(formData)),
+            body: formData,
         })
         console.log(response)
     })
@@ -301,6 +301,8 @@ if (!Astro.cookies.has("__session")) {
 
         --width-right: 600px;
         --width-left: calc(100% - var(--width-right) - 5rem);
+
+        --max-width: 1500px;
     }
 
     .dangerVisible{
@@ -332,7 +334,7 @@ if (!Astro.cookies.has("__session")) {
     main{
         margin: 2rem auto;
         padding: 2rem;
-        max-width: 1500px;
+        max-width: var(--max-width);
         width: 100%;
 
         & h1{
@@ -578,6 +580,7 @@ if (!Astro.cookies.has("__session")) {
     .form-data-quotas{
         display: flex;
         flex-direction: row;
+        
         gap: 5rem;
         & label{
             display: block;
@@ -588,8 +591,8 @@ if (!Astro.cookies.has("__session")) {
         }
         
         & input{
-            width: 100%;
-            height: calc(35px - 0.5rem);;
+            width: calc(100% - 4rem);
+            height: calc(35px - 0.5rem);
             padding: 0.5rem;
             padding-right: 0;
             border: 1px solid #333;
@@ -699,7 +702,7 @@ if (!Astro.cookies.has("__session")) {
         display: grid;
         place-items: center;
         background-color: #c91b1b;
-        height: 3rem;
+        height: 4.2rem;
         width: 3rem;
         right: 0;
         bottom: 0;
@@ -714,6 +717,61 @@ if (!Astro.cookies.has("__session")) {
 
         &:hover{
             background-color: #ed2121;
+        }
+    }
+
+    @media (max-width: 1500px) {
+        :root{
+            --max-width: 1200px;
+        }
+    }
+
+    @media (max-width: 1280px) {
+        :root{
+            --max-width: 800px;
+        }
+
+        .device__image{
+            width: 100%;
+        }
+
+        .device__data{
+            width: 100%;
+        }
+
+        .form-data-financial{
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .form-data-quotas{
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .quotas__initial{
+            & > input{
+                width: calc(100% - 2px - 0.5rem);
+            }
+        }
+    }
+
+    @media (max-width: 900px) {
+        :root{
+            --max-width: 500px;
+            --width-right: auto;
+            --width-left: auto;
+        }
+    }
+
+    @media (max-width: 580px) {
+        :root{
+            --max-width: 100%;
+        }
+
+        main{
+            padding: 4rem;
+            width: calc(100% - 8rem);
         }
     }
 
