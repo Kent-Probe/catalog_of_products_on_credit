@@ -1,18 +1,9 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "src/pages/api/**/*.ts",
-        "use": "@vercel/node"
-      },
-      {
-        "src": "astro.config.mjs",
-        "use": "@astrojs/vercel/adapter"
-      }
-    ],
-    "functions": {
-      "api/**/*.ts": {
-        "runtime": "nodejs18.x"
-      }
+  "version": 2,
+  "builds": [
+    {
+      "src": "astro.config.mjs",
+      "use": "@astrojs/vercel/adapter"
     }
-  }
+  ]
+}
