@@ -1,9 +1,3 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "astro.config.mjs",
-      "use": "@astrojs/vercel/adapter"
-    }
-  ]
+  "version": 2
 }
