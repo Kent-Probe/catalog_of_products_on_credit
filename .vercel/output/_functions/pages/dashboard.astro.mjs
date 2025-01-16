@@ -1,6 +1,6 @@
-import { c as createComponent, r as renderTemplate, d as renderComponent, m as maybeRenderHead } from '../chunks/astro/server_BGds0R7D.mjs';
+import { c as createComponent, r as renderTemplate, d as renderComponent, m as maybeRenderHead } from '../chunks/astro/server_BzkmjqL-.mjs';
 import 'kleur/colors';
-import { $ as $$Layout } from '../chunks/Layout_GI25vXjH.mjs';
+import { $ as $$Layout } from '../chunks/Layout_Alpn7L65.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Dashboard = createComponent(($$result, $$props, $$slots) => {

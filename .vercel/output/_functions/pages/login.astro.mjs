@@ -1,8 +1,8 @@
-import { c as createComponent, r as renderTemplate, m as maybeRenderHead, e as renderScript, d as renderComponent, a as addAttribute, h as renderTransition } from '../chunks/astro/server_BGds0R7D.mjs';
+import { c as createComponent, r as renderTemplate, m as maybeRenderHead, e as renderScript, d as renderComponent, a as addAttribute, h as renderTransition } from '../chunks/astro/server_BzkmjqL-.mjs';
 import 'kleur/colors';
-import { $ as $$Favicon } from '../chunks/Favicon_lk9hXLx-.mjs';
+import { $ as $$Favicon } from '../chunks/Favicon_yHnYnmXh.mjs';
 import 'clsx';
-import { $ as $$Layout } from '../chunks/Layout_GI25vXjH.mjs';
+import { $ as $$Layout } from '../chunks/Layout_Alpn7L65.mjs';
 /* empty css                                 */
 /* empty css                                         */
 export { renderers } from '../renderers.mjs';

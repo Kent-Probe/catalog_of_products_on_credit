@@ -1,8 +1,8 @@
-import { c as createComponent, r as renderTemplate, m as maybeRenderHead, d as renderComponent, e as renderScript, b as createAstro } from '../chunks/astro/server_BGds0R7D.mjs';
+import { c as createComponent, r as renderTemplate, m as maybeRenderHead, d as renderComponent, e as renderScript, b as createAstro } from '../chunks/astro/server_BzkmjqL-.mjs';
 import 'kleur/colors';
-import { $ as $$Header, a as $$CameraIcon, b as $$CameraFrontIcon, c as $$HardDiskIcon, d as $$MemoryIcon, e as $$ProcessorIcon, f as $$DeviceIcon, g as $$BatteryIcon, h as $$CloseIcon, i as $$Footer } from '../chunks/ProcessorIcon_Cg37_PKP.mjs';
+import { $ as $$Header, a as $$CameraIcon, b as $$CameraFrontIcon, c as $$HardDiskIcon, d as $$MemoryIcon, e as $$ProcessorIcon, f as $$DeviceIcon, g as $$BatteryIcon, h as $$CloseIcon, i as $$Footer } from '../chunks/ProcessorIcon_ChU-A5Kz.mjs';
 import 'clsx';
-import { $ as $$Layout } from '../chunks/Layout_GI25vXjH.mjs';
+import { $ as $$Layout } from '../chunks/Layout_Alpn7L65.mjs';
 /* empty css                                         */
 export { renderers } from '../renderers.mjs';
 

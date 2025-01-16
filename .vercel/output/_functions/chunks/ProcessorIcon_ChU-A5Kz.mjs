@@ -1,6 +1,6 @@
-import { c as createComponent, r as renderTemplate, m as maybeRenderHead, d as renderComponent, a as addAttribute, b as createAstro, e as renderScript, h as renderTransition } from './astro/server_BGds0R7D.mjs';
+import { c as createComponent, r as renderTemplate, m as maybeRenderHead, d as renderComponent, a as addAttribute, b as createAstro, e as renderScript, h as renderTransition } from './astro/server_BzkmjqL-.mjs';
 import 'kleur/colors';
-import { $ as $$Favicon } from './Favicon_lk9hXLx-.mjs';
+import { $ as $$Favicon } from './Favicon_yHnYnmXh.mjs';
 import 'clsx';
 /* empty css                                 */
 import { a as app } from './server_DFiT9_Sm.mjs';
