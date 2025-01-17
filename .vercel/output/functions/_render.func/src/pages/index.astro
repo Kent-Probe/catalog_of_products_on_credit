@@ -1,0 +1,60 @@
+---
+import Banner from '@/components/Banner.astro';
+import Content from '@/components/Content.astro';
+import Footer from '@/components/Footer.astro';
+import Header from '@/components/header.astro';
+import Layout from '@/layouts/Layout.astro';
+
+---
+
+<Layout title="Catálogo de Samicel">
+	<Header />
+	<main>
+		<Banner />
+		<Content />
+	</main>
+	<Footer />
+</Layout>
+
+<style>
+	:root{
+		--max-width: 1500px;
+	}
+	main {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: start;
+		margin: 0 auto;
+		max-width: var(--max-width);
+		gap: 5rem;
+	}
+
+	@media (max-width: 1280px) {
+		:root{
+			--max-width: 800px;
+		}
+
+		main {
+			padding: 2rem;
+		}
+	}
+
+	@media (max-width: 880px) {
+		:root{
+			--max-width: auto;
+		}
+
+		main {
+			padding: 5rem;
+		}
+		
+	}
+
+	@media (max-width: 1580px) {
+		:root{
+			--max-width: 1200px;
+		}
+		
+	}
+</style>
