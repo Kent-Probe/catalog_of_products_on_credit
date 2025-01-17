@@ -1,7 +1,7 @@
 ---
 import { firebaseConfig } from "@/firebase/client";
-import Favicon from "@/icon/favicon.astro";
-import PadlockIcon from "@/icon/padlockIcon.astro";
+import Favicon from "@/icon/Favicon.astro";
+import PadlockIcon from "@/icon/PadlockIcon.astro";
 import Layout from "@/layouts/Layout.astro";
 
 // TODO: ADD LOADING STATE IN LOGIN FORM
@@ -52,7 +52,7 @@ import { getAuth, inMemoryPersistence, signInWithEmailAndPassword } from "fireba
     <main>
         <section>
             <div transition:name="logo-samicel"  class="logo-container">
-                <Favicon size={200} />
+                <Favicon />
                 <h1>Samicel</h1>
                 <p>Gestión de catálogos de productos, creditos de samicel.</p>
             </div>
@@ -130,6 +130,11 @@ import { getAuth, inMemoryPersistence, signInWithEmailAndPassword } from "fireba
         & p {
             font-size: 1.5rem;
             color: #666;
+        }
+
+        & > :global(svg) {
+            width: 200px;
+            height: 200px;
         }
     }
 

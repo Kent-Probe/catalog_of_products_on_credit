@@ -1,12 +1,12 @@
 ---
-import Favicon from "@/icon/favicon.astro";
+import Favicon from "@/icon/Favicon.astro";
 import LogoKent from "@/icon/LogoKent.astro";
 ---
 
 <footer>
     <div class="logs-container">
         <div class="logo-container">
-            <Favicon size={70} />
+            <Favicon />
             <h1>Samicel</h1>
         </div>
         <div class="logo-container">
@@ -70,6 +70,11 @@ import LogoKent from "@/icon/LogoKent.astro";
             margin: 0;
             font-size: 4rem;
             font-weight: 700;
+        }
+
+        & > :global(svg){
+            width: 70px;
+            height: 70px;
         }
     }
 
