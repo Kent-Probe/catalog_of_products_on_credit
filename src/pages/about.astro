@@ -1,0 +1,77 @@
+---
+import Header from '@/components/Header.astro';
+import Layout from '@/layouts/Layout.astro';
+---
+
+<Layout title="Quienes Somos | Samicel">
+    <Header isSearch={false} />
+  <main class="container">
+    <h1>Quienes Somos</h1>
+    
+    <section class="about">
+        <h2>SAMICEL</h2>
+        <p>
+            Somos una empresa colombiana líder en comercialización de artículos tecnológicos, fundada con el propósito de hacer la tecnología accesible para todos los colombianos. <br>
+            En SAMICEL, somos tu destino principal para todo lo relacionado con la tecnología móvil. Desde nuestros inicios, hemos estado comprometidos en ofrecer una amplia gama de productos de la más alta calidad para mejorar tu experiencia con dispositivos móviles. Celulares de Última Generación: Nuestra selección de celulares incluye los modelos más avanzados y populares del mercado. Trabajamos con las principales marcas para garantizar que nuestros clientes tengan acceso a lo último en tecnología, desde impresionantes cámaras y pantallas de alta definición hasta baterías duraderas y rendimiento excepcional.
+        </p>
+      
+        <h3>Nuestra Historia</h3>
+        <p>Con más de una década de experiencia en el mercado tecnológico, hemos crecido hasta establecer tres sucursales estratégicamente ubicadas en Fontibón, Bogotá, permitiéndonos servir mejor a nuestra comunidad.</p>
+
+        <h3>Nuestras Sucursales</h3>
+        <div class="locations">
+            <div class="location-card">
+                <h4>Sede Principal</h4>
+                <p>Centro de Tecnologia CELUCENTER</p>
+            </div>
+            <div class="location-card">
+                <h4>Sucursal Codif</h4>
+                <p>Centro Comercial CODIF</p>
+            </div>
+            <div class="location-card">
+                <h4>Sucursal Efecty</h4>
+                <p>Carrera 100 #21-30</p>
+            </div>
+            <div class="location-card">
+                <h4>Sucursal Paarque</h4>
+                <p>Carrera 10 17a 69 local 1</p>
+            </div>
+        </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  h1 {
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .about {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .locations {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .location-card {
+    background: #f5f5f5;
+    padding: 1.5rem;
+    border-radius: 6px;
+    text-align: center;
+  }
+</style>

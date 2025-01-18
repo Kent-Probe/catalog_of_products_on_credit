@@ -1,0 +1,79 @@
+---
+import Header from '@/components/Header.astro';
+import Layout from '@/layouts/Layout.astro';
+---
+
+<Layout title="Política de Privacidad | Samicel">
+    <Header isSearch={false} />
+  <main class="container">
+    <h1>Política de Privacidad</h1>
+    
+    <section class="privacy-policy">
+      <h2>POLÍTICA DE TRATAMIENTO DE DATOS PERSONALES</h2>
+      <p>En cumplimiento de la Ley 1581 de 2012 y el Decreto 1377 de 2013, SAMICEL establece la siguiente política para el tratamiento de datos personales.</p>
+
+      <h3>1. Identificación del Responsable</h3>
+      <p>SAMICEL, con domicilio en Fontibón, Bogotá, Colombia.</p>
+
+      <h3>2. Finalidad del Tratamiento de Datos</h3>
+      <ul>
+        <li>Gestión de ventas y servicios al cliente</li>
+        <li>Envío de información comercial y promocional</li>
+        <li>Análisis estadístico y mejora de servicios</li>
+        <li>Gestión de garantías y servicio post-venta</li>
+      </ul>
+
+      <h3>3. Derechos del Titular</h3>
+      <ul>
+        <li>Conocer, actualizar y rectificar sus datos personales</li>
+        <li>Solicitar prueba de la autorización otorgada</li>
+        <li>Ser informado sobre el uso de sus datos personales</li>
+        <li>Revocar la autorización y/o solicitar la supresión de datos</li>
+      </ul>
+
+      <h3>4. Contacto</h3>
+      <p>Para ejercer sus derechos, puede contactarnos a través de:</p>
+      <ul>
+        <li>Correo electrónico: privacidad@samicel.com</li>
+        <li>Dirección: Cra. 100 #21 18, Fontibón, CENTRO, Bogotá</li>
+        <li>Teléfono: 321 9445102</li>
+      </ul>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  h1 {
+    color: #333;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .privacy-policy {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .privacy-policy h2, 
+  .privacy-policy h3 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .privacy-policy ul {
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .privacy-policy li {
+    margin-bottom: 0.5rem;
+  }
+</style>

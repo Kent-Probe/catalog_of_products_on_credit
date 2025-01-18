@@ -17,6 +17,12 @@ if (Astro.cookies.has("__session")) {
     }
 }
 
+type Props = {
+    isSearch?: boolean;
+}
+
+const { isSearch = true }: Props = Astro.props;
+
 ---
 
 <script>
@@ -50,9 +56,10 @@ if (Astro.cookies.has("__session")) {
         <h1>Samicel</h1>
     </a>
 
-    <div class="search-container">
+   {isSearch && 
+   <div class="search-container">
         <Search />
-    </div>
+    </div>}
 
     {isLogin && (
         <div class="login-container">
