@@ -4,7 +4,6 @@ import Favicon from "@/icon/Favicon.astro";
 import PadlockIcon from "@/icon/PadlockIcon.astro";
 import Layout from "@/layouts/Layout.astro";
 
-// TODO: ADD LOADING STATE IN LOGIN FORM
 ---
 
 <script>
@@ -14,8 +13,13 @@ import { getAuth, inMemoryPersistence, signInWithEmailAndPassword } from "fireba
     const auth = getAuth(app);
     auth.setPersistence(inMemoryPersistence);
     const form = document.getElementById("formSignIn") as HTMLFormElement;
+    const buttonLogin = document.getElementById("toSend") as HTMLButtonElement;
+    const message = document.querySelector(".message");
+    const textMessage = message?.querySelector(".message-text")
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
+        buttonLogin.disabled = true;
+        buttonLogin.textContent = "Cargando...";
 
         const formData = new FormData(form);
         const email = formData.get("email")?.toString();
@@ -31,6 +35,12 @@ import { getAuth, inMemoryPersistence, signInWithEmailAndPassword } from "fireba
 
         if(userCredential.errorCode){
             console.log(userCredential.errorMessage);
+            const text = userCredential.errorCode === "auth/invalid-email" ? "Email no válido" : "Contraseña incorrecta";
+            textMessage.textContent = text;
+            message?.classList.add("message-active");
+            message?.classList.add("message-error");
+            buttonLogin.disabled = false;
+            buttonLogin.textContent = "Login";
             return;
         }
         
@@ -45,6 +55,8 @@ import { getAuth, inMemoryPersistence, signInWithEmailAndPassword } from "fireba
         if(response.redirected){
             window.location.assign(response.url);
         }
+        buttonLogin.disabled = false;
+        buttonLogin.textContent = "Login";
     });
 </script>
 
@@ -294,5 +306,10 @@ import { getAuth, inMemoryPersistence, signInWithEmailAndPassword } from "fireba
             align-items: start;
             gap: 2rem;
         }
+    }
+
+    #toSend:disabled{
+        background-color: #ccc;
+        cursor: wait;
     }
 </style>

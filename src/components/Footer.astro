@@ -172,7 +172,7 @@ import LogoKent from "@/icon/LogoKent.astro";
         flex-wrap: wrap;
     }
 
-    @media (max-width: 670px) {
+    @media (max-width: 790px) {
         footer{
             gap: 5rem;
             flex-direction: column;
@@ -180,6 +180,17 @@ import LogoKent from "@/icon/LogoKent.astro";
 
         .logs-container{
             justify-content: center;
+        }
+
+        .links-container {
+            flex-direction: column;
+            align-items: center;
+
+            & > div{
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
         }
     }
 </style>

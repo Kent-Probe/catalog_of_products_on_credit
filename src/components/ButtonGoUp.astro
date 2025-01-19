@@ -1,0 +1,68 @@
+---
+import Arrow from "@/icon/Arrow.astro";
+---
+
+<button id="buttonGoUp" title="Go to top">
+    <Arrow />
+</button>
+
+
+<script>
+    const buttonGoUp = document.getElementById("buttonGoUp");
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            buttonGoUp.style.display = "block";
+        } else {
+            buttonGoUp.style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    buttonGoUp?.addEventListener("click", topFunction);
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+<style>
+    #buttonGoUp {
+        display: none;
+        position: fixed;
+        bottom: 10rem;
+        right: 3rem;
+        z-index: 9999;
+        border: none;
+        outline: none;
+        background-color: rebeccapurple;
+        color: white;
+        cursor: pointer;
+        padding: 1.5rem; 
+        border-radius: 50%;
+        font-size: 1.8rem;
+
+        transition: background-color 0.3s ease-in-out;
+
+        & > :global(svg) {
+            rotate: 180deg;
+            & > :global(path){
+                fill: white !important;
+            }
+
+            transition: transform 0.3s ease-in-out;
+        }
+
+        &:hover > :global(svg) {
+            transform: rotate(360deg);
+        }
+
+        &:hover {
+            background-color: #792EDE; /* Add a dark-grey background on hover */
+        }
+    }
+
+
+</style>

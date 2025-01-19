@@ -9,6 +9,8 @@ import WhatsAppIcon from "@/icon/WhatsAppIcon.astro";
 <style>
     a{
         --padding-whatsapp: 2rem;
+        height: 80px;
+        width: 80px;
         position: fixed;
         right: var(--padding-whatsapp);
         bottom: var(--padding-whatsapp);
@@ -21,6 +23,12 @@ import WhatsAppIcon from "@/icon/WhatsAppIcon.astro";
 
         &:hover{
             transform: scale(1.2) skew(-10deg);
+        }
+
+        @media (max-width: 500px) {
+            --padding-whatsapp: 1.5rem;
+            width: 60px;
+            height: 60px;
         }
     }
 </style>

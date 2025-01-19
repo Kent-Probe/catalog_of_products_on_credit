@@ -3,6 +3,8 @@ import { atom } from "nanostores";
 
 const productsValues = seed.products;
 
+export const isLoading = atom(false);
+
 export const products = atom(productsValues);
 export const productsWithFilters = atom(productsValues);
 

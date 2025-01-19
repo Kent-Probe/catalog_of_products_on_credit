@@ -26,10 +26,11 @@ const { isSearch = true }: Props = Astro.props;
 ---
 
 <script>
-    const button = document.querySelector('.login-container');
+    const button = document.querySelector('.login-container-button');
     const form = button.querySelector('form');
 
     button.addEventListener('click', (e) => {
+        console.log('click');
         button.classList.toggle('active_login-container');
         form.classList.toggle('open_container');
     });
@@ -56,20 +57,21 @@ const { isSearch = true }: Props = Astro.props;
         <h1>Samicel</h1>
     </a>
 
-   {isSearch && 
-   <div class="search-container">
-        <Search />
-    </div>}
+    
+    {isSearch && 
+        <div class="search-container">
+            <Search />
+        </div>}
 
     {isLogin && (
-        <div class="login-container">
+        <div type="button" class="login-container-button">
             {email}
             <form action="/api/auth/signout">
                 <button type="submit">
                     Cerrar sesión
                 </button>
                 <button type="button" id="create-credit">
-                    Crear un crédito
+                    Crear un producto
                 </button>
             </form>
         </div>
@@ -82,8 +84,11 @@ const { isSearch = true }: Props = Astro.props;
     )}
 </header>
 
+{isSearch && <span class="space"></span> }
+
 <style>
     header {
+        position: relative;
         padding: 3rem 10rem;
         background-color: #fff;
         
@@ -97,7 +102,7 @@ const { isSearch = true }: Props = Astro.props;
         color: #333;
     }
 
-    .login-container{
+    .login-container, .login-container-button{
         position: relative;
         display: flex;
         justify-content: center;
@@ -124,7 +129,6 @@ const { isSearch = true }: Props = Astro.props;
         & > a{
             color: rebeccapurple;
             text-decoration: none;
-
             transition: color 0.3s ease-in-out;
         }
 
@@ -225,6 +229,16 @@ const { isSearch = true }: Props = Astro.props;
     }
 
     @media (max-width: 800px) {
+        header {
+            padding: 1rem 1.5rem;
+        }
+        
+        .space{
+            display: block;
+            height: 5.5rem;
+            width: 100%;
+        }
+
         .login-container{
             padding: 0.5rem 0.8rem;
         }     
@@ -238,6 +252,15 @@ const { isSearch = true }: Props = Astro.props;
             & > h1{
                 font-size: 1.5rem;
             }
+        }
+
+        .search-container{
+            --padding: 4rem;
+            position: absolute;
+            top: calc(100% + 1.5rem);
+            width: calc(100% - var(--padding) * 2);
+            padding-inline: var(--padding);
+            left: 0;
         }
     }
 

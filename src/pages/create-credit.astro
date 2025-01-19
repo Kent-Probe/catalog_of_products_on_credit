@@ -19,13 +19,12 @@ if (!Astro.cookies.has("__session")) {
 }
 
 --- 
-
+    
 <Layout title="Crear Crédito">
-    <Header />
+    <Header isSearch={false} />
     <main>
         <h1>Crear un crédito</h1>
         <p>Completa el formulario para solicitar un crédito</p>
-        <br>
         <div class="danger">
             <p><strong>Error! </strong><span class="error"></span></p>
         </div>
@@ -144,13 +143,14 @@ if (!Astro.cookies.has("__session")) {
                     </div>
                 </div>
             </div>
-            <button class="button-send-data" type="submit">Crear crédito</button>
+            <button class="button-send-data" id="button-send-data" type="submit">Crear crédito</button>
         </form>
     </main>
     <Footer />
 </Layout>
 
 <script>
+    const buttonSend = document.getElementById("button-send-data") as HTMLButtonElement
     const dropArea = document.getElementById("cel-img-label") as HTMLLabelElement
     const inputField = document.getElementById("celImg") as HTMLInputElement
     const imageView = document.getElementById("img-view") as HTMLDivElement
@@ -163,7 +163,7 @@ if (!Astro.cookies.has("__session")) {
 
     const financials = document.getElementById("financials") as HTMLInputElement
     const financialsContainer = document.querySelector(".form-data-financials") as HTMLDivElement
-
+    
     const checkboxs = document.querySelectorAll(".checkbox") as NodeListOf<HTMLInputElement>
 
     cleanFieldQuotas.addEventListener("click", () => {
@@ -262,16 +262,30 @@ if (!Astro.cookies.has("__session")) {
         return isValid;
     }
 
+
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        if(!validateForm()) return;
+        console.log("submit")
+        buttonSend.disabled = true;
+        buttonSend.textContent = "Enviando...";
+        if(!validateForm()) {
+            buttonSend.disabled = false;
+            buttonSend.textContent = "Crear crédito";
+            return
+        };
+
         const formData = new FormData(form);
-        console.log(Object.fromEntries(formData))
         const response = await fetch("/api/catalog", {
             method: "POST",
             body: formData,
         })
-        console.log(response)
+
+        buttonSend.disabled = false;
+        buttonSend.textContent = "Crear crédito";
+
+        if(response.redirected){
+            window.location.href = response.url;
+        }
     })
     
     const uploadImage = () => {
@@ -305,6 +319,11 @@ if (!Astro.cookies.has("__session")) {
         --max-width: 1500px;
     }
 
+    button:disabled{
+        cursor: wait;
+        background-color: #ccc;
+    }
+
     .dangerVisible{
         display: block !important;
         scale: 1;
@@ -332,8 +351,9 @@ if (!Astro.cookies.has("__session")) {
     }
 
     main{
-        margin: 2rem auto;
-        padding: 2rem;
+        margin: 0 auto;
+        padding-top: 1rem;
+        padding-bottom: 2rem;
         max-width: var(--max-width);
         width: 100%;
 
@@ -603,6 +623,9 @@ if (!Astro.cookies.has("__session")) {
 
     .quotas__initial{
         min-width: var(--width-right);
+        & > input{
+            width: calc(100% - 2px - 0.5rem) !important;
+        }
     }
 
     .quotas__quotas{
@@ -770,7 +793,7 @@ if (!Astro.cookies.has("__session")) {
         }
 
         main{
-            padding: 4rem;
+            padding: 2rem;
             width: calc(100% - 8rem);
         }
     }

@@ -1,5 +1,6 @@
 ---
 import Banner from '@/components/Banner.astro';
+import ButtonGoUp from '@/components/ButtonGoUp.astro';
 import Content from '@/components/Content.astro';
 import Footer from '@/components/Footer.astro';
 import Header from '@/components/Header.astro';
@@ -14,6 +15,7 @@ import Layout from '@/layouts/Layout.astro';
 		<Content />
 	</main>
 	<Footer />
+	<ButtonGoUp />
 </Layout>
 
 <style>
@@ -36,17 +38,14 @@ import Layout from '@/layouts/Layout.astro';
 		}
 
 		main {
-			padding: 2rem;
+			padding: 5rem;
+			padding-top: 2rem;
 		}
 	}
 
 	@media (max-width: 880px) {
 		:root{
 			--max-width: auto;
-		}
-
-		main {
-			padding: 5rem;
 		}
 		
 	}
