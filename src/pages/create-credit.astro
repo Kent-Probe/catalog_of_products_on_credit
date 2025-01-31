@@ -1,6 +1,7 @@
 ---
 import Footer from '@/components/Footer.astro'
 import Header from '@/components/Header.astro'
+import Tooltip from '@/components/Tooltip.astro'
 import { app } from '@/firebase/server'
 import BatteryIcon from '@/icon/BatteryIcon.astro'
 import CameraFrontIcon from '@/icon/CameraFrontIcon.astro'
@@ -51,46 +52,60 @@ if (!Astro.cookies.has("__session")) {
                     </div>
                     <div class="data__last">
                         <div class="container-input">
-                            <label for="camera">
-                                <CameraIcon />
-                            </label>
-                            <input name="camera" id="camera" type="number" />
+                            <Tooltip text="Cámara trasera">
+                                <label for="camera">
+                                    <CameraIcon />
+                                </label>
+                            </Tooltip>
+                            <input name="camera" id="camera" type="text" />
                         </div>
                         <div class="container-input">
-                            <label for="cameraFront">
-                                <CameraFrontIcon />
-                            </label>
-                            <input name="cameraFront" id="cameraFront" type="number" />
+                            <Tooltip text="Cámara frontal">
+                                <label for="cameraFront">
+                                    <CameraFrontIcon />
+                                </label>
+                            </Tooltip>
+                            <input name="cameraFront" id="cameraFront" type="text" />
                         </div>
                         <div class="container-input">
-                            <label for="disk">
-                                <HardDiskIcon />
-                            </label>
-                            <input name="disk" id="disk" type="number" />
+                            <Tooltip text="Almacenamiento">
+                                <label for="disk">
+                                    <HardDiskIcon />
+                                </label>
+                            </Tooltip>
+                            <input name="disk" id="disk" type="text" />
                         </div>
                         <div class="container-input">
-                            <label for="memory">
-                                <MemoryIcon />
-                            </label>
-                            <input name="memory" id="memory" type="number" />
+                            <Tooltip text="Memoria RAM">
+                                <label for="memory">
+                                    <MemoryIcon />
+                                </label>
+                            </Tooltip>
+                            <input name="memory" id="memory" type="text" />
                         </div>
                         <div class="container-input">
-                            <label for="processor">
-                                <ProcessorIcon />
-                            </label>
+                            <Tooltip text="Procesador">
+                                <label for="processor">
+                                    <ProcessorIcon />
+                                </label>
+                            </Tooltip>
                             <input name="processor" id="processor" type="text" />
                         </div>
                         <div class="container-input">
-                            <label for="inches">
-                                <DeviceIcon />
-                            </label>
-                            <input name="inches" id="inches" type="number" />
+                            <Tooltip text="Tamaño de la pantalla">
+                                <label for="inches">
+                                    <DeviceIcon />
+                                </label>
+                            </Tooltip>
+                            <input name="inches" id="inches" type="text" />
                         </div>
                         <div class="container-input">
-                            <label for="battery">
-                                <BatteryIcon />
-                            </label>
-                            <input name="battery" id="battery" type="number" />
+                            <Tooltip text="Batería">
+                                <label for="battery">
+                                    <BatteryIcon />
+                                </label>
+                            </Tooltip>
+                            <input name="battery" id="battery" type="text" />
                         </div>
                     </div>
                 </div>
@@ -98,7 +113,7 @@ if (!Astro.cookies.has("__session")) {
             <div class="form-data-financial">
                 <div class="form-data-price">
                     <label for="price">Precio</label>
-                    <input type="number" id="price" name="price" />
+                    <input type="text" id="price" name="price" />
                 </div>
                 <div class="form-data-financials">
                     <div class="financials__title">
@@ -124,7 +139,7 @@ if (!Astro.cookies.has("__session")) {
             <div class="form-data-quotas">
                 <div class="quotas__initial">
                     <label for="initial">Cuota inicial</label>
-                    <input type="number" id="initial" name="initial" />
+                    <input type="text" id="initial" name="initial" />
                 </div>
                 <div class="quotas__quotas">
                     <div>
@@ -136,9 +151,9 @@ if (!Astro.cookies.has("__session")) {
                     </div>
                     <div class="quotas__modal">
                         <label for="addQuota">Cuotas: </label>
-                        <input type="number" id="addQuota" name="addQuota" />
+                        <input type="text" id="addQuota" name="addQuota" />
                         <label for="addQuotaPrice">Precio: </label>
-                        <input type="number" id="addQuotaPrice" name="addQuotaPrice" />
+                        <input type="text" id="addQuotaPrice" name="addQuotaPrice" />
                         <button class="addQuotaBtn" type="button">+</button>
                     </div>
                 </div>
@@ -443,7 +458,7 @@ if (!Astro.cookies.has("__session")) {
 
             border: 1px solid #333;
             border-radius: 0.3rem;
-            overflow: hidden;
+            /* overflow: hidden; */
 
             &:last-child{
                 margin-bottom: 0;
@@ -451,6 +466,7 @@ if (!Astro.cookies.has("__session")) {
 
             
             & label{
+                height: 100%;
                 --color-label: #f0e6e6;
                 display: grid;
                 place-items: center;

@@ -1,0 +1,43 @@
+---
+const { text } = Astro.props;
+---
+
+<div class="tooltip-container">
+  <slot></slot>
+  <div class="tooltip-content">
+    {text}
+  </div>
+</div>
+
+<style>
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .tooltip-content {
+    visibility: hidden;
+    position: absolute;
+    width: auto;
+    top: 110%; /* Posición del tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+
+    background-color: #1b263b;
+    color: #fff;
+
+    text-align: center;
+    border-radius: 4px;
+    padding: 5px;
+
+    opacity: 0;
+
+    transition: opacity 0.3s;
+  }
+
+  .tooltip-container:hover .tooltip-content {
+    visibility: visible;
+    opacity: 1;
+  }
+</style>
