@@ -76,9 +76,9 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     const db = getFirestore(app);
     const docRef = await db.collection("catalog");
     await docRef.add(valuesToSend);
+    return redirect("/");
   } catch (e) {
     await fs.unlink(outputPath);
     return new Response("Error durante la creación", { status: 400, statusText: "Error durante la creación" });
   }
-  return redirect("/");
 };

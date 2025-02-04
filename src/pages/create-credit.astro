@@ -330,6 +330,13 @@ if (!Astro.cookies.has("__session")) {
             errorShow.textContent = response.statusText;
         }
 
+        if(response.status === 500){
+            const errorShow = document.getElementsByClassName("error")[0] as HTMLSpanElement;
+            const errorDiv = document.getElementsByClassName("danger")[0] as HTMLDivElement;
+            errorDiv?.classList.add("dangerVisible");
+            errorShow.textContent = response.statusText;
+        }
+
         if(response.redirected){
             window.location.href = response.url;
         }
