@@ -334,7 +334,7 @@ if (!Astro.cookies.has("__session")) {
             const errorShow = document.getElementsByClassName("error")[0] as HTMLSpanElement;
             const errorDiv = document.getElementsByClassName("danger")[0] as HTMLDivElement;
             errorDiv?.classList.add("dangerVisible");
-            errorShow.textContent = response.statusText;
+            errorShow.textContent = "Error al conectarse con la API";
         }
 
         if(response.redirected){

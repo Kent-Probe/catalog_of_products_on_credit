@@ -27,6 +27,7 @@ type typeFormData = {
 };
 
 export const POST: APIRoute = async ({ request, redirect }) => {
+  let outputPath = "";
   try {
     const formData = await request.formData();
 
@@ -52,7 +53,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     const buffer = Buffer.from(arrayBuffer);
 
     const webp = await sharp(buffer).webp().toBuffer();
-    const outputPath = path.join(process.cwd(), "src", "images", "catalog", `${values.brand}-${values.model}.webp`);
+    outputPath = path.join(process.cwd(), "src", "images", "catalog", `${values.brand}-${values.model}.webp`);
     await fs.writeFile(outputPath, webp);
 
     const valuesToSend = {
@@ -78,7 +79,19 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     await docRef.add(valuesToSend);
     return redirect("/");
   } catch (e) {
-    await fs.unlink(outputPath);
-    return new Response("Error durante la creación", { status: 400, statusText: "Error durante la creación" });
+    console.error("Error durante la creación:", e);
+    let moreError = "";
+    if (outputPath) {
+      try {
+        await fs.unlink(outputPath);
+      } catch (unlinkError) {
+        console.error("Error al eliminar el archivo:", unlinkError);
+        moreError = "Error al eliminar el archivo";
+      }
+    }
+    return new Response("Error durante la creación", {
+      status: 400,
+      statusText: `Error durante la creación ${moreError}`,
+    });
   }
 };
