@@ -13,16 +13,17 @@ type product = {
     id: number;
     brand: string;
     model: string;
-    rear_camera_mp: number;
-    front_camera_mp: number;
+    rear_camera_mp: string;
+    front_camera_mp: string;
     image: string;
-    rom_memory_gb: number;
-    ram_memory_gb: number;
+    rom_memory_gb: string;
+    ram_memory_gb: string;
     processor: string;
-    screen_inches: number;
-    battery_mah: number;
+    screen_inches: string;
+    battery_mah: string;
     financials: string[];
     savings: number;
+    initial: number;
     installments: { quantity: number, price: number }[];
 }
 
@@ -101,9 +102,13 @@ const image = product.image || ImageSrc.src;
         </div>
     </div>
     <div class="card-product__quotas">
+        <div class="quotas__chip">
+            <p>Inicial</p>
+            <p>$ {product.initial.toLocaleString()}</p>
+        </div>
         {product.installments.map((installment, index) => (
             <div class="quotas__chip">
-                <p>{index === 0 ? "Inicial" : installment.quantity + " Cuotas"}</p>
+                <p>{installment.quantity + " Cuotas"}</p>
                 <p>$ {installment.price.toLocaleString()}</p>
             </div>
         ))}
