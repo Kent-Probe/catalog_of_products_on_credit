@@ -1,7 +1,7 @@
 {
   "name": "catalog_of_products_on_credit",
   "type": "module",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
