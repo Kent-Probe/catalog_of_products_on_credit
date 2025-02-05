@@ -1,9 +1,8 @@
+import { uploadImage } from "@/cloudinary/index";
 import { app } from "@/firebase/server";
 import type { APIRoute } from "astro";
 import { getFirestore } from "firebase-admin/firestore";
 import { promises as fs } from "fs";
-import path from "path";
-import sharp from "sharp";
 
 type typeFormData = {
   brand: string;
@@ -33,9 +32,6 @@ export const POST: APIRoute = async ({ request, redirect }) => {
 
     const values = Object.fromEntries(formData.entries()) as typeFormData;
 
-    console.log(values);
-    console.log(formData);
-
     if (JSON.stringify(values) === "{}") {
       return new Response("No se proporciono datos", { status: 400, statusText: "No se proporciono datos" });
     }
@@ -48,13 +44,9 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       };
     });
 
-    const file = values.celImg;
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    const webp = await sharp(buffer).webp().toBuffer();
-    outputPath = path.join(process.cwd(), "src", "images", "catalog", `${values.brand}-${values.model}.webp`);
-    await fs.writeFile(outputPath, webp);
+    // Subir la imagen a Cloudinary
+    const uploadResult = await uploadImage(values.celImg);
+    const imageUrl = uploadResult.secure_url;
 
     const valuesToSend = {
       brand: values.brand,
@@ -70,7 +62,7 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       savings: parseInt(values.price.replace(/\./g, "")),
       installments: installments,
       initial: parseInt(values.initial.replace(/\./g, "")),
-      image: `/src/images/catalog/${values.brand}-${values.model}.webp`,
+      image: imageUrl,
       isVisible: true,
     };
 

@@ -7,7 +7,6 @@ import HardDiskIcon from "@/icon/HardDiskIcon.astro";
 import MemoryIcon from "@/icon/MemoryIcon.astro";
 import ProcessorIcon from "@/icon/ProcessorIcon.astro";
 
-import ImageSrc from "@/img/placeHolder.png";
 
 type product = {
     id: number;
@@ -32,14 +31,13 @@ type CardProductProps = {
 }
 
 const { product }: CardProductProps = Astro.props;
-const image = product.image || ImageSrc.src;
 
 ---
 
 <article class="card-product">
     <div class="card-product__header">
         <div class="card-product__container-img">
-            <img src={image} alt={product.model} loading="lazy"/>
+            <img src={product.image} alt={product.model} loading="lazy"/>
         </div>
         <div class="card-product__content">
             <p>{product.brand}</p>
