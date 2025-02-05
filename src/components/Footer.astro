@@ -104,7 +104,6 @@ import LogoKent from "@/icon/LogoKent.astro";
     .logo-container { 
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
         
         & > h1{
@@ -116,6 +115,11 @@ import LogoKent from "@/icon/LogoKent.astro";
         & > :global(svg){
             width: 70px;
             height: 70px;
+        }
+
+        & > a > :global(svg){
+            width: 80px;
+            height: 120px;
         }
     }
 
