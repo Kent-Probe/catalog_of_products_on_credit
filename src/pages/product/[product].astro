@@ -1,0 +1,842 @@
+---
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import Tooltip from "@/components/Tooltip.astro";
+import BatteryIcon from "@/icon/BatteryIcon.astro";
+import CameraFrontIcon from "@/icon/CameraFrontIcon.astro";
+import CameraIcon from "@/icon/CameraIcon.astro";
+import CloseIcon from "@/icon/closeIcon.astro";
+import DeviceIcon from "@/icon/DeviceIcon.astro";
+import HardDiskIcon from "@/icon/HardDiskIcon.astro";
+import MemoryIcon from "@/icon/MemoryIcon.astro";
+import ProcessorIcon from "@/icon/ProcessorIcon.astro";
+import Layout from "@/layouts/Layout.astro";
+import { productsWithFilters } from "@/store/store";
+import type { ProductsType } from "@/type/products";
+import { FormatNumber } from "@/utility/format";
+
+export const prerender = false;
+if (!Astro.cookies.has("__session")) {
+  return Astro.redirect("/login");
+}
+
+type Params = {
+  product: string;
+};
+
+const { product }: Params = Astro.params;
+if (!productsWithFilters.value) return Astro.redirect("/404");
+
+const productData = (productsWithFilters.value as ProductsType[]).find((p) => p.id === product);
+if (!productData) {
+  return Astro.redirect("/404");
+}
+
+const financialsValue = productData.financials.join(", ");
+const quotasValue = productData.installments
+  .map((quota) => `${quota.quantity}-${FormatNumber(String(quota.price))}`)
+  .join(", ");
+
+const price = FormatNumber(String(productData.savings));
+const initial = FormatNumber(String(productData.initial));
+---
+
+<Layout title={`Producto ${productData.brand} ${productData.model}`}>
+  <Header isSearch={false} />
+  <main>
+    <h1>Editando {productData.brand} {productData.model}</h1>
+    <p>Completa el formulario para solicitar un crédito</p>
+    <div class="danger">
+      <p><strong>Error! </strong><span class="error"></span></p>
+    </div>
+    <form action="/api/catalog" method="get" class="form-create-credit">
+      <div class="form-data-device">
+        <label
+          transition:name=`img-product-to-show-${productData.id}`
+          id="cel-img-label"
+          class="device__image"
+          for="celImg"
+        >
+          <input type="file" id="celImg" name="celImg" accept="image/*" hidden />
+          <div style=`background-image: url(${productData.image});` id="img-view" class="img-view"></div>
+        </label>
+        <div class="device__data">
+          <div class="data__first">
+            <div class="container-input">
+              <label for="brand">Marca</label>
+              <input value={productData.brand} name="brand" id="brand" type="text" />
+            </div>
+            <div class="container-input">
+              <label for="model">Modelo</label>
+              <input value={productData.model} name="model" id="model" type="text" />
+            </div>
+          </div>
+          <div class="data__last">
+            <div class="container-input">
+              <Tooltip text="Cámara trasera">
+                <label for="camera">
+                  <CameraIcon />
+                </label>
+              </Tooltip>
+              <input value={productData.rear_camera_mp} name="camera" id="camera" type="text" />
+            </div>
+            <div class="container-input">
+              <Tooltip text="Cámara frontal">
+                <label for="cameraFront">
+                  <CameraFrontIcon />
+                </label>
+              </Tooltip>
+              <input value={productData.front_camera_mp} name="cameraFront" id="cameraFront" type="text" />
+            </div>
+            <div class="container-input">
+              <Tooltip text="Almacenamiento">
+                <label for="disk">
+                  <HardDiskIcon />
+                </label>
+              </Tooltip>
+              <input value={productData.rom_memory_gb} name="disk" id="disk" type="text" />
+            </div>
+            <div class="container-input">
+              <Tooltip text="Memoria RAM">
+                <label for="memory">
+                  <MemoryIcon />
+                </label>
+              </Tooltip>
+              <input value={productData.ram_memory_gb} name="memory" id="memory" type="text" />
+            </div>
+            <div class="container-input">
+              <Tooltip text="Procesador">
+                <label for="processor">
+                  <ProcessorIcon />
+                </label>
+              </Tooltip>
+              <input value={productData.processor} name="processor" id="processor" type="text" />
+            </div>
+            <div class="container-input">
+              <Tooltip text="Tamaño de la pantalla">
+                <label for="inches">
+                  <DeviceIcon />
+                </label>
+              </Tooltip>
+              <input value={productData.screen_inches} name="inches" id="inches" type="text" />
+            </div>
+            <div class="container-input">
+              <Tooltip text="Batería">
+                <label for="battery">
+                  <BatteryIcon />
+                </label>
+              </Tooltip>
+              <input value={productData.battery_mah} name="battery" id="battery" type="text" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-data-financial">
+        <div class="form-data-price">
+          <label for="price">Precio</label>
+          <input value={price} type="text" id="price" name="price" />
+        </div>
+        <div class="form-data-financials">
+          <div class="financials__title">
+            <label for="financials">Financieras</label>
+            <input
+              placeholder="Seleccione minimo una financiera"
+              readonly
+              id="financials"
+              name="financials"
+              type="text"
+              value={financialsValue}
+            />
+          </div>
+          <div class="financials__checkbox">
+            <label for="celya" class="container">
+              Celya
+              <input
+                class="checkbox"
+                id="celya"
+                name="celya"
+                type="checkbox"
+                value="Celya"
+                checked={productData.financials.includes("Celya")}
+              />
+              <span class="checkmark"></span>
+            </label>
+            <label for="krediya" class="container">
+              Krediya
+              <input
+                class="checkbox"
+                id="krediya"
+                name="krediya"
+                type="checkbox"
+                value="Krediya"
+                checked={productData.financials.includes("Krediya")}
+              />
+              <span class="checkmark"></span>
+            </label>
+            <label for="aloCred" class="container">
+              Alo Cred
+              <input
+                class="checkbox"
+                id="aloCred"
+                name="aloCred"
+                type="checkbox"
+                value="Alo Cred"
+                checked={productData.financials.includes("Alo Cred")}
+              />
+              <span class="checkmark"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-data-quotas">
+        <div class="quotas__initial">
+          <label for="initial">Cuota inicial</label>
+          <input value={initial} type="text" id="initial" name="initial" />
+        </div>
+        <div class="quotas__quotas">
+          <div>
+            <label for="quotas">Cuotas:</label>
+            <input readonly placeholder="Agrege cuotas" type="text" id="quotas" name="quotas" value={quotasValue} />
+            <span class="close">
+              <CloseIcon />
+            </span>
+          </div>
+          <div class="quotas__modal">
+            <label for="addQuota">Cuotas: </label>
+            <input type="number" id="addQuota" name="addQuota" />
+            <label for="addQuotaPrice">Precio: </label>
+            <input type="text" id="addQuotaPrice" name="addQuotaPrice" />
+            <button class="addQuotaBtn" type="button">+</button>
+          </div>
+        </div>
+      </div>
+      <button class="button-send-data" id="button-send-data" type="submit">Editar crédito</button>
+    </form>
+  </main>
+  <Footer />
+</Layout>
+
+<script>
+  import { FormatNumber } from "@/utility/format";
+
+  const imgView = document.getElementById("img-view");
+  const imgInput = document.getElementById("celImg");
+  const price = document.getElementById("price") as HTMLInputElement;
+  const initial = document.getElementById("initial") as HTMLInputElement;
+  const financialsInput = document.getElementById("financials") as HTMLInputElement;
+  const quotasInput = document.getElementById("quotas") as HTMLInputElement;
+  const addQuotaBtn = document.querySelector(".addQuotaBtn");
+  const closeBtn = document.querySelector(".close");
+  const form = document.querySelector(".form-create-credit");
+  const error = document.querySelector(".error");
+  const danger = document.querySelector(".danger");
+  const financials = document.querySelectorAll(".checkbox");
+  const financialsArr = financialsInput.value.split(", ");
+  const quotasArr = quotasInput.value.split(", ");
+
+  //Modals
+  const quotasModal = document.querySelector(".quotas__quotas");
+  const financialsContainer = document.querySelector(".form-data-financials");
+
+  window.addEventListener("click", (e) => {
+    if (!financialsContainer.contains(e.target)) {
+      financialsContainer.classList.remove("active-financials");
+    }
+    if (!quotasModal.contains(e.target)) {
+      quotasModal.classList.remove("active-quotas");
+    }
+  });
+
+  financialsInput.addEventListener("click", () => {
+    financialsContainer.classList.toggle("active-financials");
+  });
+
+  quotasInput.addEventListener("click", () => {
+    quotasModal.classList.toggle("active-quotas");
+  });
+
+  closeBtn.addEventListener("click", () => {
+    quotasArr.length = 0;
+    quotasInput.value = "";
+  });
+
+  imgInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      imgView.style.backgroundImage = `url(${e.target.result})`;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  const productId = window.location.pathname.split("/").pop();
+  if (!productId) {
+    window.location.replace("/");
+  }
+
+  financials.forEach((financial) => {
+    financial.addEventListener("change", (e) => {
+      if (e.target.checked) {
+        financialsArr.push(e.target.value);
+      } else {
+        financialsArr.splice(financialsArr.indexOf(e.target.value), 1);
+      }
+      financialsInput.value = financialsArr.join(", ");
+    });
+  });
+
+  addQuotaBtn.addEventListener("click", () => {
+    const addQuota = document.getElementById("addQuota");
+    const addQuotaPrice = document.getElementById("addQuotaPrice");
+    if (addQuota.value && addQuotaPrice.value) {
+      quotasArr.push(`${addQuota.value}-${addQuotaPrice.value}`);
+      quotasInput.value = quotasArr.join(", ");
+      addQuota.value = "";
+      addQuotaPrice.value = "";
+      quotasModal.classList.remove("active-quotas");
+    }
+  });
+
+  // Changes
+  form.addEventListener("change", (e) => {
+    const target = e.target as HTMLInputElement;
+    if (target.value) {
+      target.classList.remove("invalid");
+    }
+  });
+
+  price.addEventListener("input", () => {
+    if (price.value === "") return;
+    price.value = FormatNumber(price.value);
+  });
+
+  initial.addEventListener("input", () => {
+    if (initial.value === "") return;
+    initial.value = FormatNumber(initial.value);
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const button = document.getElementById("button-send-data") as HTMLButtonElement;
+    const textButton = button.textContent;
+    button.disabled = true;
+    button.textContent = "Enviando...";
+    const uriImage = imgView.style.backgroundImage.replace(/url\((['"])?(.*?)\1\)/gi, "$2");
+    const formData = new FormData(form);
+    formData.append("id", productId);
+    if (uriImage.includes("cloudinary")) {
+      formData.append("uriImage", uriImage);
+      formData.delete("celImg");
+    }
+    const response = await fetch("/api/catalog", {
+      method: "PATCH",
+      body: formData,
+    });
+    button.disabled = true;
+    button.textContent = textButton;
+    if (response.status !== 200) {
+      error.textContent = response.statusText;
+      danger.classList.add("dangerVisible");
+      setTimeout(() => {
+        danger.classList.remove("dangerVisible");
+      }, 5000);
+    } else {
+      window.location.replace("/");
+    }
+  });
+</script>
+
+<style>
+  :root {
+    --color-primary: #f0e6e6;
+    --color-secondary: #333;
+
+    --width-right: 600px;
+    --width-left: calc(100% - var(--width-right) - 5rem);
+
+    --max-width: 1500px;
+  }
+
+  button:disabled {
+    cursor: wait;
+    background-color: #ccc;
+  }
+
+  .dangerVisible {
+    display: block !important;
+    scale: 1;
+  }
+
+  .danger {
+    display: block;
+    scale: 1;
+    margin-top: 1.5rem;
+    padding: 1.5rem 1.2rem;
+    background-color: #ffdddd;
+    border-left: 6px solid #f44336;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
+    transition:
+      display 0.3s ease-in-out allow-discrete,
+      scale 0.3s ease-in-out;
+
+    @starting-style {
+      display: none;
+      scale: 0.5;
+    }
+
+    & > p {
+      font-size: large !important;
+    }
+  }
+
+  main {
+    margin: 0 auto;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    max-width: var(--max-width);
+    width: 100%;
+
+    & h1 {
+      font-size: 2.5rem;
+      color: #000;
+    }
+
+    & p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #333;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+
+  .img-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    border: 2px solid #333;
+    background-color: rgba(102, 51, 153, 1);
+    /* background: radial-gradient(circle,  20%, rgba(102, 51, 153, 1) 80%); */
+    cursor: pointer;
+
+    background-position: center;
+    background-size: cover;
+
+    transition: background-image 0.3s ease-in-out;
+
+    & p {
+      color: #333;
+      text-align: center;
+      font-size: medium;
+      font-weight: 600;
+    }
+
+    & span {
+      font-size: 1.2rem;
+      color: #777;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    &:first-child {
+      background-color: red;
+    }
+  }
+
+  .form-data-device {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5rem;
+  }
+
+  .device__image {
+    height: auto;
+    min-width: var(--width-right);
+  }
+
+  .device__data {
+    display: flex;
+    flex-direction: column;
+    min-width: var(--width-left);
+    gap: 1rem;
+  }
+
+  .data__first,
+  .data__last {
+    & .container-input {
+      display: flex;
+      height: 30px;
+      flex-direction: row;
+      gap: 1rem;
+      margin-bottom: 1rem;
+
+      border: 1px solid #333;
+      border-radius: 0.3rem;
+      /* overflow: hidden; */
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      & label {
+        height: 100%;
+        --color-label: #f0e6e6;
+        display: grid;
+        place-items: center;
+        font-size: 1.3rem;
+        text-transform: capitalize;
+        border-right: 1px solid #333;
+        min-width: 70px;
+        background-color: rebeccapurple;
+        color: var(--color-label);
+        fill: var(--color-label);
+      }
+
+      & input {
+        width: 100%;
+        border: none;
+        outline: none;
+      }
+    }
+  }
+
+  .form-data-financial {
+    display: flex;
+    flex-direction: row;
+    gap: 5rem;
+
+    & .form-data-price,
+    .financials__title,
+    & .form-data-financials {
+      display: flex;
+      flex-direction: column;
+      font-size: 1.5rem;
+      gap: 1rem;
+      color: #333;
+      font-weight: 600;
+
+      & input {
+        padding: 0.5rem;
+        border: 1px solid #333;
+        border-radius: 0.3rem;
+        height: calc(35px - 0.5rem);
+        outline: none;
+      }
+    }
+
+    & .form-data-price {
+      min-width: var(--width-right);
+    }
+
+    & .form-data-financials {
+      position: relative;
+      min-width: var(--width-left);
+
+      & .financials__checkbox {
+        display: none;
+        position: absolute;
+        top: calc(100% + 5px);
+        opacity: 0;
+        z-index: 9999;
+
+        transition:
+          display 0.3s ease-in-out allow-discrete,
+          opacity 0.3s ease-in-out;
+
+        flex-direction: column;
+        gap: 0.5rem;
+        color: #f0e6e6;
+        padding: 1.2rem 1.5rem;
+        background-color: #777;
+
+        & label {
+          position: relative;
+          display: block;
+          gap: 1rem;
+          min-width: 200px;
+          align-items: center;
+          font-size: 1.5rem;
+          color: #f0e6e6;
+          padding: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #333;
+          }
+
+          & input {
+            display: none;
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+          }
+        }
+
+        & .container input:checked ~ .checkmark::after {
+          border-color: #a754fa;
+        }
+
+        & .checkmark {
+          position: absolute;
+          top: calc(50% - 25px / 2);
+          right: 10px;
+          height: 25px;
+          width: 25px;
+
+          &::after {
+            content: "";
+            position: absolute;
+            display: block;
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid #ccc;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+          }
+        }
+      }
+    }
+  }
+
+  .active-financials {
+    & .financials__checkbox {
+      display: flex !important;
+      opacity: 1 !important;
+
+      @starting-style {
+        display: none;
+        opacity: 0;
+      }
+    }
+  }
+
+  .active-quotas {
+    & .quotas__modal {
+      display: flex !important;
+      opacity: 1 !important;
+
+      @starting-style {
+        display: none;
+        opacity: 0;
+      }
+    }
+  }
+
+  .form-data-quotas {
+    display: flex;
+    flex-direction: row;
+
+    gap: 5rem;
+    & label {
+      display: block;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      color: #333;
+      font-weight: 600;
+    }
+
+    & input {
+      width: calc(100% - 4rem);
+      height: calc(35px - 0.5rem);
+      padding: 0.5rem;
+      padding-right: 0;
+      border: 1px solid #333;
+      border-radius: 0.3rem;
+      outline: none;
+    }
+  }
+
+  .quotas__initial {
+    min-width: var(--width-right);
+    & > input {
+      width: calc(100% - 2px - 0.5rem) !important;
+    }
+  }
+
+  .quotas__quotas {
+    position: relative;
+    min-width: var(--width-left);
+
+    & .quotas__modal {
+      display: flex;
+      z-index: 999;
+      flex-direction: row;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: calc(100% + 5px);
+      opacity: 0;
+
+      transition:
+        display 0.3s ease-in-out allow-discrete,
+        opacity 0.3s ease-in-out;
+
+      padding: 1.2rem 1.5rem;
+      background-color: #777;
+
+      & > label {
+        display: block;
+        margin-bottom: 0;
+        font-size: 1.5rem;
+        color: #f0e6e6 !important;
+        font-weight: 600;
+      }
+
+      & > input {
+        width: 100px;
+        height: 35px;
+        padding: 0.5rem;
+        border: 1px solid #333;
+        border-radius: 0.3rem;
+        outline: none;
+      }
+
+      & > button {
+        width: 35px;
+        height: 35px;
+        padding: 0.5rem;
+        border: none;
+        border-radius: 0.3rem;
+        background-color: rebeccapurple;
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+
+        &:hover {
+          background-color: #914ad8;
+        }
+      }
+    }
+  }
+
+  .button-send-data {
+    width: 200px;
+    height: 50px;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 0.3rem;
+    background-color: rebeccapurple;
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+
+    &:hover {
+      background-color: #a754fa;
+    }
+  }
+
+  .invalid {
+    border-color: #c91b1b !important;
+  }
+
+  .error {
+    color: #c91b1b !important;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  input:read-only {
+    background-color: #f7f8ff;
+    color: #333;
+    cursor: pointer;
+  }
+
+  .close {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    background-color: #c91b1b;
+    height: 4.2rem;
+    width: 3rem;
+    right: 0;
+    bottom: 0;
+    border-radius: 5px;
+    cursor: pointer;
+
+    transition: all 0.3s ease-in-out;
+
+    & svg {
+      fill: #fff;
+    }
+
+    &:hover {
+      background-color: #ed2121;
+    }
+  }
+
+  @media (max-width: 1500px) {
+    :root {
+      --max-width: 1200px;
+    }
+  }
+
+  @media (max-width: 1280px) {
+    :root {
+      --max-width: 800px;
+    }
+
+    .device__image {
+      width: 100%;
+    }
+
+    .device__data {
+      width: 100%;
+    }
+
+    .form-data-financial {
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .form-data-quotas {
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .quotas__initial {
+      & > input {
+        width: calc(100% - 2px - 0.5rem);
+      }
+    }
+  }
+
+  @media (max-width: 900px) {
+    :root {
+      --max-width: 500px;
+      --width-right: auto;
+      --width-left: auto;
+    }
+  }
+
+  @media (max-width: 580px) {
+    :root {
+      --max-width: 100%;
+    }
+
+    main {
+      padding: 2rem;
+      width: calc(100% - 8rem);
+    }
+  }
+</style>

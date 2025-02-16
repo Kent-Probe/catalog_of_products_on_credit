@@ -4,25 +4,25 @@ import { app } from "@/firebase/server";
 import { products } from "@/seed/seed.json";
 import { getFirestore } from "firebase-admin/firestore";
 
-type ProductsType = {
-    id: string | number,
-    brand: string,
-    model: string,
-    rear_camera_mp: number,
-    front_camera_mp: number,
-    rom_memory_gb: number,
-    ram_memory_gb: number,
-    processor: string,
-    screen_inches: number,
-    battery_mah: number,
-    financials: string[],
-    savings: number,
-    installments: { quantity: number, price: number}[],
-    isVisible: boolean
-    image: string
+import { app } from "@/firebase/server";
+import { getAuth } from "firebase-admin/auth";
+import { productsWithFilters } from "@/store/store";
+import type { ProductsType } from "@/type/products";
+
+let isLogin = false;
+let email = "";
+/* Check if the user is authenticated */
+if (Astro.cookies.has("__session")) {
+  const auth = getAuth(app);
+  const sessionCookie = Astro.cookies.get("__session").value;
+  const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+  if (decodedCookie) {
+    isLogin = true;
+    email = decodedCookie.email;
+  }
 }
 
-let searchTerm = ''
+let searchTerm = "";
 let financials: string[] = [];
 let ram: string[] = [];
 let rom: string[] = [];
@@ -32,89 +32,89 @@ let camera: string[] = [];
 const db = getFirestore(app);
 const catalog = db.collection("catalog");
 const querySnapshot = await catalog.get();
-const productsDatabase = querySnapshot.docs.map(doc => doc.data()) as ProductsType[];
+const productsDatabase = querySnapshot.docs.map((doc) => doc.data()) as ProductsType[];
 
 if (Astro.request.url) {
-    const url = new URL(Astro.request.url);
-    searchTerm = url.searchParams.get('search') || '';
-    financials = url.searchParams.get('financials')?.toLowerCase().split(',') || [];
-    ram = url.searchParams.get('ram')?.split(',') || [];
-    rom = url.searchParams.get('rom')?.split(',') || [];
-    battery = url.searchParams.get('battery')?.split(',') || [];
-    camera = url.searchParams.get('camera')?.split(',') || [];    
+  const url = new URL(Astro.request.url);
+  searchTerm = url.searchParams.get("search") || "";
+  financials = url.searchParams.get("financials")?.toLowerCase().split(",") || [];
+  ram = url.searchParams.get("ram")?.split(",") || [];
+  rom = url.searchParams.get("rom")?.split(",") || [];
+  battery = url.searchParams.get("battery")?.split(",") || [];
+  camera = url.searchParams.get("camera")?.split(",") || [];
 }
 
-const filteredProducts = productsDatabase.filter(product => {
-    let match = true;
-    if(!product.isVisible){
-        return false;
+const filteredProducts = productsDatabase.filter((product) => {
+  let match = true;
+  if (isLogin === false && !product.isVisible) {
+    return false;
+  }
+  if (!product.model.toLowerCase().includes(searchTerm.toLowerCase())) {
+    match = false;
+  }
+  if (financials.length > 0) {
+    if (!product.financials.some((financial) => financials.includes(financial.toLocaleLowerCase()))) {
+      match = false;
     }
-    if(!product.model.toLowerCase().includes(searchTerm.toLowerCase())){
-        match = false;
+  }
+  if (ram.length > 0) {
+    if (product.ram_memory_gb < parseInt(ram[0]) || product.ram_memory_gb > parseInt(ram[1])) {
+      match = false;
     }
-    if(financials.length > 0){
-        if(!product.financials.some(financial => financials.includes(financial.toLocaleLowerCase()))){
-            match = false;
-        }
+  }
+  if (rom.length > 0) {
+    if (product.rom_memory_gb < parseInt(rom[0]) || product.rom_memory_gb > parseInt(rom[1])) {
+      match = false;
     }
-    if(ram.length > 0){
-        if(product.ram_memory_gb < parseInt(ram[0]) || product.ram_memory_gb > parseInt(ram[1])){
-            match = false;
-        }
+  }
+  if (battery.length > 0) {
+    if (product.battery_mah < parseInt(battery[0]) || product.battery_mah > parseInt(battery[1])) {
+      match = false;
     }
-    if(rom.length > 0){
-        if(product.rom_memory_gb < parseInt(rom[0]) || product.rom_memory_gb > parseInt(rom[1])){
-            match = false;
-        }
+  }
+  if (camera.length > 0) {
+    if (product.rear_camera_mp < parseInt(camera[0]) || product.rear_camera_mp > parseInt(camera[1])) {
+      match = false;
     }
-    if(battery.length > 0){
-        if(product.battery_mah < parseInt(battery[0]) || product.battery_mah > parseInt(battery[1])){
-            match = false;
-        }
-    }
-    if(camera.length > 0){
-        if(product.rear_camera_mp < parseInt(camera[0]) || product.rear_camera_mp > parseInt(camera[1])){
-            match = false;
-        }
-    }
-    return match;
+  }
+  return match;
 });
 
+productsWithFilters.set(filteredProducts);
 ---
 
 <div data-container-products class="products">
-    {
-        filteredProducts.map(product => {
-            return <CardProduct product={product} />;
-        })
-    }
+  {
+    filteredProducts.map((product) => {
+      return <CardProduct product={product} isLogin={isLogin} />;
+    })
+  }
 </div>
 
 <script>
-    const searchInput = document.querySelector('[data-input-search]');
-    const formSend = document.querySelector('[data-form-search]');
-    formSend.addEventListener('submit', (e) => {
-        e.preventDefault();
-        window.location.reload();
-    });
-    searchInput.addEventListener('input', () => {
-        const searchTerm = searchInput.value;
-        const url = new URL(window.location);
-        url.searchParams.set('search', searchTerm);
-        window.history.pushState({ }, '', url);
-    });
+  const searchInput = document.querySelector("[data-input-search]");
+  const formSend = document.querySelector("[data-form-search]");
+  formSend.addEventListener("submit", (e) => {
+    e.preventDefault();
+    window.location.reload();
+  });
+  searchInput.addEventListener("input", () => {
+    const searchTerm = searchInput.value;
+    const url = new URL(window.location);
+    url.searchParams.set("search", searchTerm);
+    window.history.pushState({}, "", url);
+  });
 </script>
 
-
 <style>
-    .products {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+  .products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
 
-        gap: 2rem;
+    gap: 2rem;
 
-        width: 100%;
+    width: 100%;
 
-        margin-bottom: 2rem;
-    }
+    margin-bottom: 2rem;
+  }
 </style>

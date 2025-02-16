@@ -1,12 +1,10 @@
-import seed from "@/seed/seed.json";
+import type { ProductsType } from "@/type/products";
 import { atom } from "nanostores";
-
-const productsValues = seed.products;
 
 export const isLoading = atom(false);
 
-export const products = atom(productsValues);
-export const productsWithFilters = atom(productsValues);
+export const products = atom<ProductsType[]>([]);
+export const productsWithFilters = atom(products);
 
 export const loginValues = atom({
   token: "",
